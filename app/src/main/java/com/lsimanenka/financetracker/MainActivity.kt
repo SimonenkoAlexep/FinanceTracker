@@ -4,10 +4,8 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -32,55 +34,173 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.lsimanenka.financetracker.ListItem.LilListItem
+import com.lsimanenka.financetracker.ListItem.ListItem
+import com.lsimanenka.financetracker.navigation.MyNavHost
+import com.lsimanenka.financetracker.navigation.NavItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        setContent {
+@Composable
+fun LottieSplashScreen(
+    onFinished: () -> Unit
+) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.splash_animation)
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = 1,
+        restartOnPlay = false,
+        speed = 1f
+    )
+
+    LaunchedEffect(progress) {
+        if (progress == 1f) {
+            onFinished()
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LightColors.primary),
+        contentAlignment = Alignment.Center
+    ) {
+        LottieAnimation(
+            composition = composition,
+            progress = progress,
+            modifier = Modifier
+                .size(200.dp)
+        )
+    }
+}
+
+
+@Composable
+fun AppEntry() {
+    val navController = rememberNavController()
+
+    NavHost(navController, startDestination = "splash") {
+        composable("splash") {
+            LottieSplashScreen {
+                navController.navigate("main") {
+                    popUpTo("splash") { inclusive = true }
+                }
+            }
+        }
+        composable("main") {
             FinanceTracker()
         }
     }
 }
 
-@Composable
-fun FinanceTracker() {
-    val navController = rememberNavController()
+class MainActivity : ComponentActivity() {
 
-    Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
-    ) { innerPadding ->
-        NavHost(navController, startDestination = "expenses", Modifier.padding(innerPadding)) {
-            composable("expenses") { ExpensesScreen() }
-            composable("income") { ExpensesScreen() }
-            composable("account") { ExpensesScreen() }
-            composable("items") { ExpensesScreen() }
-            composable("settings") { ExpensesScreen() }
+    private var isReady = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        //WindowCompat.setDecorFitsSystemWindows(window, false)
+        setContent {
+            AppEntry()
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FinanceTracker() {
+    val navController = rememberNavController()
+    val backStack by navController.currentBackStackEntryAsState()
+    val currentRoute = backStack?.destination?.route
+
+    Scaffold(
+        topBar = TopBarFor(currentRoute),
+
+        bottomBar = { BottomNavigationBar(navController) },
+
+        floatingActionButton = {
+            if (currentRoute == NavItem.EXPENSES.route || currentRoute == NavItem.INCOME.route || currentRoute == NavItem.ACCOUNT.route) {
+                FloatingActionButton(
+                    onClick = { /*…*/ },
+                    containerColor = LightColors.primary,
+                    contentColor = LightColors.onPrimary,
+                    modifier = Modifier.size(56.dp),
+                    shape = CircleShape
+                ) { Icon(Icons.Default.Add, "Добавить", modifier = Modifier.size(31.dp)) }
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
+
+    ) { innerPadding ->
+        MyNavHost(
+            navController = navController,
+            startDest = NavItem.EXPENSES,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}
+
+
+@Composable
+fun TopBarFor(route: String?): @Composable () -> Unit = when (route) {
+    NavItem.EXPENSES.route -> {
+        { MyTopAppBar("Расходы сегодня", painterResource(R.drawable.ic_history), "История") }
+    }
+
+    NavItem.INCOME.route -> {
+        { MyTopAppBar("Доходы сегодня", painterResource(R.drawable.ic_history), "История") }
+    }
+
+    NavItem.ACCOUNT.route -> {
+        { MyTopAppBar("Мой счёт", painterResource(R.drawable.ic_edit), "Редактировать") }
+    }
+
+    NavItem.ITEMS.route -> {
+        { MyTopAppBar("Мои статьи", null, null) }
+    }
+
+    NavItem.SETTINGS.route -> {
+        { MyTopAppBar("Настройки", null, null) }
+    }
+
+    else -> {
+        { }
+    }
+}
+
+
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    val items = listOf(
-        NavItem("expenses", "Расходы", ImageVector.vectorResource(R.drawable.ic_expenses)),
-        NavItem("income", "Доходы", ImageVector.vectorResource(R.drawable.ic_income)),
-        NavItem("account", "Счёт", ImageVector.vectorResource(R.drawable.ic_account)),
-        NavItem("items", "Статьи", ImageVector.vectorResource(R.drawable.ic_items)),
-        NavItem("settings", "Настройки", ImageVector.vectorResource(R.drawable.ic_settings)),
-    )
-
     var selectedItem by rememberSaveable { mutableStateOf(0) }
-
     NavigationBar {
-        items.forEachIndexed { index, item ->
+        NavItem.entries.forEachIndexed { index, item ->
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.label) },
-                label = { Text(text = item.label, fontSize = 11.sp, fontFamily = FontFamily.SansSerif) },
+                icon = {
+                    Icon(
+                        ImageVector.vectorResource(item.icon),
+                        contentDescription = item.label
+                    )
+                },
+                label = {
+                    Text(
+                        text = item.label,
+                        fontSize = 11.sp,
+                        fontFamily = FontFamily.SansSerif
+                    )
+                },
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
@@ -104,114 +224,52 @@ fun BottomNavigationBar(navController: NavHostController) {
 //data class ListItemData(val lead : String?, val content : String, val comment : String?, val money : String?, val trail : String?)
 
 
-@Composable
-fun LilListItem(lead : String? = null, content : String, money : String? = null, trail : String? = null, color : Color = Color.White) {
-    Row(Modifier.background(color = color).height(56.dp).padding(16.dp), verticalAlignment = Alignment.CenterVertically ) {
-        if (lead != null) {
-            Text(lead, fontSize = 16.sp, modifier =  Modifier.padding(4.dp))
-        }
-        Text(content, fontSize = 16.sp, modifier =  Modifier.padding(4.dp))
-        Spacer(Modifier.weight(1f))
-        if (money != null) {
-            Text(money+"₽", fontSize = 16.sp, modifier =  Modifier.padding(start = 8.dp, end = 8.dp))
-        }
-        if (trail != null) {
-            Text(trail, fontSize = 16.sp, modifier =  Modifier.padding(start = 8.dp, end = 8.dp))
-        }
-    }
-}
-
-@Composable
-fun ListItem(lead : String? = null, content : String, comment : String? = null, money : String? = null, trail : String? = null) {
-    Row(Modifier.height(70.dp).border(1.dp, Color.Gray).padding(16.dp), verticalAlignment = Alignment.CenterVertically ) {
-        if (lead != null) {
-            Text(lead, fontSize = 16.sp, modifier =  Modifier.padding(4.dp))
-        }
-        if (comment == null) {
-            Text(content, fontSize = 16.sp, modifier =  Modifier.padding(4.dp))
-        } else {
-            Column(modifier =  Modifier.padding(end = 4.dp, start = 4.dp)) {
-                Text(content, fontSize = 16.sp)
-                Text(comment, fontSize = 14.sp, color = Color(0xFF49454F))
-            }
-        }
-        Spacer(Modifier.weight(1f))
-        if (money != null) {
-            Text(money+"₽", fontSize = 16.sp, modifier =  Modifier.padding(8.dp))
-        }
-        if (trail != null) {
-            Text(trail, fontSize = 16.sp, modifier =  Modifier.padding(8.dp))
-        }
-    }
-}
-
-
-@Composable
-fun ExpensesScreen() {
-    Column {
-        MyTopAppBar("Расходы сегодня", painterResource(R.drawable.ic_history), "История")
-        LilListItem( content = "Всего", money = "436558", color = LightColors.secondary)
-        ListItem("S", "Аренда квартиры", null, "100000", "S")
-        ListItem("S", "Аренда квартиры", null, "100000", "S")
-        ListItem("S", "Аренда квартиры", "Harold", "100000", "S")
-        ListItem("S", "Аренда квартиры", "Anny", "100000", "S")
-        ListItem("S", "Аренда квартиры", null, "100000", "S")
-        ListItem("S", "Аренда квартиры", "Alex", "100000", "S")
-    }
-
-
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(title: String, painter : Painter?, iconDescription : String?) {
+fun MyTopAppBar(
+    title: String,
+    painter: Painter?,
+    iconDescription: String?
+) {
     val systemUiController = rememberSystemUiController()
     SideEffect {
-        systemUiController.setStatusBarColor(
-            color = LightColors.primary
-        )
+        systemUiController.setStatusBarColor(LightColors.primary)
     }
-    TopAppBar(
+
+    CenterAlignedTopAppBar(
         title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.width(32.dp))
+            Text(
+                text = title,
+                fontSize = 22.sp,
+                color = LightColors.onSecondary
+            )
+        },
 
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = title,
-                        fontSize = 22.sp,
-                        textAlign = TextAlign.Center
+        navigationIcon = {
+            Spacer(Modifier.width(48.dp))
+        },
+
+        actions = {
+            painter?.let {
+                IconButton(onClick = { /*...*/ }) {
+                    Icon(
+                        painter = it,
+                        contentDescription = iconDescription,
+                        tint = LightColors.onSecondary
                     )
-                }
-
-                if (painter != null) {
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier.padding(end = 8.dp, top = 8.dp)
-                    ) {
-                        Icon(
-                            painter = painter,
-                            contentDescription = iconDescription
-                        )
-                    }
                 }
             }
         },
-        modifier = Modifier.width(412.dp).height(64.dp),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LightColors.primary
+
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = LightColors.primary,
+            titleContentColor = LightColors.onSecondary
         )
     )
 }
 
-data class NavItem(val route: String, val label: String, val icon: ImageVector)
+
+//data class NavItem(val route: String, val label: String, val icon: ImageVector)
 
 @Preview(showBackground = true)
 @Composable
@@ -220,11 +278,11 @@ fun PreviewApp() {
 }
 
 
-private val LightColors = lightColorScheme(
+val LightColors = lightColorScheme(
     primary = Color(0xFF2AE881),
     secondary = Color(0xFFD4FAE6),
     background = Color.White,
-    surface = Color.White,
+    surface = Color(0xFFECE6F0),
     onPrimary = Color.White,
     onSecondary = Color.Black
 )
