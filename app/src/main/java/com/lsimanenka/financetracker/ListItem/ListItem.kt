@@ -1,6 +1,5 @@
 package com.lsimanenka.financetracker.ListItem
 
-import android.widget.Switch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -30,78 +29,27 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lsimanenka.financetracker.LightColors
-import com.lsimanenka.financetracker.R
 import androidx.compose.material3.Switch
+import com.lsimanenka.financetracker.ui.theme.LightColors
 
 
+private const val paddingInListItem : Int = 8
 
 @Composable
-fun LilListItem(
+private fun GeneralListItem(
+    height: Int,
     lead: String? = null,
     content: String,
+    comment: String? = null,
     money: String? = null,
-    trail: Any? = null,
+    trail: @Composable (() -> Unit)? = null,
     color: Color = Color.White
 ) {
     Row(
         Modifier
             .fillMaxWidth()
             .background(color = color)
-            .height(56.dp)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (lead != null) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .background(
-                        color = LightColors.onPrimary,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = lead,
-                    fontSize = 18.sp,
-                    color = LightColors.onSecondary,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-        }
-        Text(content, fontSize = 16.sp, modifier = Modifier.padding(4.dp))
-        Spacer(Modifier.weight(1f))
-        if (money != null) {
-            Text(
-                money + "₽",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 8.dp, end = 8.dp)
-            )
-        }
-        if (trail is Int) {
-            IconButton(onClick = { /*...*/ }) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(trail),
-                    contentDescription = null
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ListItem(
-    lead: String? = null,
-    content: String,
-    comment: String? = null,
-    money: String? = null,
-    trail: @Composable (() -> Unit)? = null
-) {
-    Row(
-        Modifier
-            .height(70.dp)
+            .height(height.dp)
             .border(1.dp, Color(0xFFCAC4D0))
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -124,7 +72,7 @@ fun ListItem(
                     textAlign = TextAlign.Center
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(paddingInListItem.dp))
         }
 
         // 2) Основной контент + опциональный комментарий
@@ -144,7 +92,7 @@ fun ListItem(
             Text(
                 text = "$money₽",
                 fontSize = 16.sp,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = paddingInListItem.dp)
             )
         }
 
@@ -153,38 +101,41 @@ fun ListItem(
             trail()
 
         }
-       /* if (trail is Switch) {
-            var isDarkTheme by rememberSaveable { mutableStateOf(false) }
-            Switch(
-                checked = isDarkTheme,
-                onCheckedChange = { isDarkTheme = it },
-                colors = SwitchDefaults.colors(
-                    checkedTrackColor = LightColors.primary
-                )
-            )
-        }*/
     }
 }
 
 @Composable
-fun IconButtonTrail() {
-    IconButton(onClick = { /*...*/ }) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_more_vert),
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
-fun SwitchTrail() {
-    var isDarkTheme by rememberSaveable { mutableStateOf(false) }
-    Switch(
-        checked = isDarkTheme,
-        onCheckedChange = { isDarkTheme = it },
-        colors = SwitchDefaults.colors(
-            checkedTrackColor = LightColors.primary
-        )
+fun HeaderListItem(
+    lead: String? = null,
+    content: String,
+    money: String? = null,
+    trail: @Composable (() -> Unit)? = null,
+    color: Color = Color.White
+) {
+    GeneralListItem(
+        height = 56,
+        lead = lead,
+        content = content,
+        money = money,
+        trail = trail,
+        color = color
     )
 }
 
+@Composable
+fun ListItem(
+    lead: String? = null,
+    content: String,
+    comment: String? = null,
+    money: String? = null,
+    trail: @Composable (() -> Unit)? = null
+) {
+    GeneralListItem(
+        height = 70,
+        lead = lead,
+        content = content,
+        money = money,
+        trail = trail,
+        comment = comment
+    )
+}
