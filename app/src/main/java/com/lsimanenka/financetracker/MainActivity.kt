@@ -35,15 +35,17 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.lsimanenka.financetracker.bottomNavigationBar.BottomNavigationBar
-import com.lsimanenka.financetracker.navigation.MyNavHost
-import com.lsimanenka.financetracker.navigation.NavItem
-import com.lsimanenka.financetracker.splash.LottieSplashScreen
-import com.lsimanenka.financetracker.topAppBar.TopBarFor
+import com.lsimanenka.financetracker.ui.bottomNavigationBar.BottomNavigationBar
+import com.lsimanenka.financetracker.ui.navigation.MyNavHost
+import com.lsimanenka.financetracker.ui.navigation.NavItem
+import com.lsimanenka.financetracker.ui.navigation.Routes
+import com.lsimanenka.financetracker.ui.splash.LottieSplashScreen
+import com.lsimanenka.financetracker.ui.topAppBar.TopBarFor
 import com.lsimanenka.financetracker.ui.theme.LightColors
+import dagger.hilt.android.AndroidEntryPoint
 
 
-@Composable
+/*@Composable
 fun AppEntry() {
     val navController = rememberNavController()
 
@@ -60,9 +62,8 @@ fun AppEntry() {
         }
     }
 }
-
+*/
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -72,14 +73,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
+
+/*@Composable
 fun FinanceTracker() {
     val navController = rememberNavController()
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
 
     Scaffold(
-        topBar = TopBarFor(currentRoute),
+        topBar = TopBarFor(navController, currentRoute),
 
         bottomBar = { BottomNavigationBar(navController) },
 
@@ -103,8 +105,44 @@ fun FinanceTracker() {
             modifier = Modifier.padding(innerPadding)
         )
     }
-}
+}*/
 
+@Composable
+fun AppEntry() {
+    val navController = rememberNavController()
+    val navBackStack by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStack?.destination?.route
+
+    val showChrome = currentRoute != Routes.SPLASH
+
+    Scaffold(
+        topBar = {
+            if (showChrome) TopBarFor(navController, currentRoute)
+        },
+        bottomBar = {
+            if (showChrome) BottomNavigationBar(navController)
+        },
+        floatingActionButton = {
+            if (showChrome && (currentRoute == Routes.EXPENSES || currentRoute == Routes.INCOME || currentRoute == Routes.ACCOUNT)) {
+                FloatingActionButton(
+                    onClick = { /*…*/ },
+                    modifier = Modifier.size(56.dp),
+                    containerColor = LightColors.primary,
+                    contentColor = LightColors.onPrimary,
+                    shape = CircleShape
+                ) {
+                    Icon(Icons.Default.Add, "Добавить", modifier = Modifier.size(31.dp))
+                }
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
+    ) { innerPadding ->
+        MyNavHost(
+            navController = navController,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}
 
 
 
