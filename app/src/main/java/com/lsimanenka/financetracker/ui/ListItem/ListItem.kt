@@ -60,7 +60,7 @@ private fun GeneralListItem(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
 
-    ) {
+        ) {
         // 1) Если lead не null — рисуем кружок с эмодзи/текстом
         if (lead != null) {
             Box(
@@ -96,7 +96,12 @@ private fun GeneralListItem(
 
         if (money != null && trailContent != null) {
             Column(horizontalAlignment = Alignment.End) {
-                Text(text = "$money₽", fontSize = 16.sp, modifier = Modifier.padding(horizontal = paddingInListItem.dp), textAlign = TextAlign.End)
+                Text(
+                    text = "$money₽",
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(horizontal = paddingInListItem.dp),
+                    textAlign = TextAlign.End
+                )
                 Text(
                     text = trailContent,
                     fontSize = 16.sp,
@@ -161,7 +166,7 @@ fun ListItem(
     onClick: (() -> Unit)? = null
 ) {
     GeneralListItem(
-        height = 70,
+        height = 72,
         lead = lead,
         content = content,
         money = money,

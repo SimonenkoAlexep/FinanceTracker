@@ -43,7 +43,7 @@ fun MyNavHost(
             }
         }
         composable(Routes.EXPENSES_HISTORY) {
-            ExpensesHistoryScreen(50)
+            ExpensesHistoryScreen(33)
         }
         composable(Routes.EXPENSES) {
             ExpensesScreen()

@@ -13,12 +13,13 @@ import kotlinx.serialization.json.Json
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
-    @Binds
-    @Singleton
+    @Binds @Singleton
     abstract fun bindTransactionsRepo(
         impl: TransactionsRepositoryImpl
     ): TransactionsRepository
 }
+

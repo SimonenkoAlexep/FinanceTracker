@@ -65,18 +65,23 @@ object NetworkModule {
 }
 */
 
+import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.lsimanenka.financetracker.common.Constants.BASE_URL
 import com.lsimanenka.financetracker.data.network.TransactionsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -95,6 +100,24 @@ object NetworkModule {
         chain.proceed(newRequest)
     }
 
+    /*@Provides
+    @Singleton
+    fun provideNetworkMonitor(@ApplicationContext context: Context): NetworkMonitor {
+        return AndroidNetworkMonitor(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiCallHelper(networkMonitor: NetworkMonitor): ApiCallHelper {
+        return ApiCallHelper(networkMonitor)
+    }*/
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = GsonBuilder()
+        .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .create()
+
     @Provides
     @Singleton
     fun provideOkHttpClient(authInterceptor: Interceptor): OkHttpClient =
@@ -104,14 +127,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit =
+    fun provideRetrofit(client: OkHttpClient, gson : Gson): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)  // Ваш BASE_URL из Constants
+            .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(
-                Json { ignoreUnknownKeys = true }
-                    .asConverterFactory("application/json".toMediaType())
-            )
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
     @Provides

@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 data class TransactionListState(
     val isLoading: Boolean = false,
-    val transactions: List<Transaction> = emptyList(),
+    val transactions: List<TransactionResponse> = emptyList(),
     val startDate: String? = null,
     val endDate: String? = null,
     val error: String = ""
@@ -34,14 +34,11 @@ class ExpensesHistoryViewModel @Inject constructor(
     private val getTransactionUseCase: GetTransactionUseCase
 ) : ViewModel() {
 
-    // UI-состояние экрана
     private val _state = mutableStateOf(TransactionListState())
     val state: State<TransactionListState> = _state
 
-    // Номер аккаунта, передается из экрана
     private val _accountId = MutableStateFlow<Int?>(null)
 
-    // Диапазон дат
     @SuppressLint("NewApi")
     private val _startDate = MutableStateFlow(LocalDate.now().withDayOfMonth(1))
     @SuppressLint("NewApi")
@@ -68,7 +65,7 @@ class ExpensesHistoryViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = TransactionListState(
                             isLoading = false,
-                            transactions = result.data!!.map { it.toDomain() }
+                            transactions = result.data!!
                         )
                     }
                     is Resource.Error -> {
@@ -92,12 +89,10 @@ class ExpensesHistoryViewModel @Inject constructor(
         _startDate.value = newDate
     }
 
-    // Внешний API: выбрать конечную дату
     fun onEndDatePicked(newDate: LocalDate) {
         _endDate.value = newDate
     }
 
-    // Формируем flow<Resource<...>> для заданных параметров
     @SuppressLint("NewApi")
     private fun loadTransactionsFlow(
         accountId: Int,
