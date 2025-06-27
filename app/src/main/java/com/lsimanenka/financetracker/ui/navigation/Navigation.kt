@@ -8,11 +8,12 @@ import androidx.navigation.compose.composable
 import com.lsimanenka.financetracker.ui.screens.ExpensesScreen
 import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.screens.AccountScreen
-import com.lsimanenka.financetracker.ui.screens.ExpensesHistoryScreen
+import com.lsimanenka.financetracker.ui.screens.HistoryScreen
 import com.lsimanenka.financetracker.ui.screens.IncomeScreen
 import com.lsimanenka.financetracker.ui.screens.ItemsScreen
 import com.lsimanenka.financetracker.ui.screens.SettingsScreen
 import com.lsimanenka.financetracker.ui.splash.LottieSplashScreen
+import com.lsimanenka.financetracker.ui.viewmodel.HistoryViewModel
 
 
 enum class NavItem(val route: String, val label: String?, val icon: Int?) {
@@ -43,13 +44,13 @@ fun MyNavHost(
             }
         }
         composable(Routes.EXPENSES_HISTORY) {
-            ExpensesHistoryScreen(33)
+            HistoryScreen(isIncome = false)
         }
         composable(Routes.EXPENSES) {
-            ExpensesScreen()
+            ExpensesScreen(isIncome = false)
         }
         composable(Routes.INCOME) {
-            IncomeScreen()
+            ExpensesScreen(isIncome = true)
         }
         composable(Routes.ACCOUNT) {
             AccountScreen()
@@ -59,6 +60,9 @@ fun MyNavHost(
         }
         composable(Routes.SETTINGS) {
             SettingsScreen()
+        }
+        composable(Routes.INCOME_HISTORY) {
+            HistoryScreen(isIncome = true)
         }
     }
 }
@@ -75,7 +79,7 @@ fun MyNavHost(navController: NavHostController, startDest: NavItem, modifier: Mo
                     NavItem.INCOME -> IncomeScreen()
                     NavItem.ITEMS -> ItemsScreen()
                     NavItem.SETTINGS -> SettingsScreen()
-                    NavItem.EXPENSES_HISTORY  -> ExpensesHistoryScreen()
+                    NavItem.EXPENSES_HISTORY  -> HistoryScreen()
 //                    NavItem.SPLASH -> LottieSplashScreen {
 //                        navController.navigate(NavItem.EXPENSES.route) {
 //                            popUpTo(NavItem.SPLASH.route) { inclusive = true }

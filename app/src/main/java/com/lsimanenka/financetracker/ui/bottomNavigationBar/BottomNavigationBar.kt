@@ -25,6 +25,7 @@ data class BottomNavItem(val route: String, val label: String, val icon: Int)
 fun resolveSelectedTab(currentRoute: String?): String? {
     return when (currentRoute) {
         Routes.EXPENSES_HISTORY -> Routes.EXPENSES
+        Routes.INCOME_HISTORY -> Routes.INCOME
         else -> currentRoute
     }
 }

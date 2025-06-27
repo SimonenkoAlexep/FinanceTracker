@@ -10,28 +10,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
 import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
 import com.lsimanenka.financetracker.ui.ListItem.ListItem
-import com.lsimanenka.financetracker.ui.theme.LightColors
-import com.lsimanenka.financetracker.ui.viewmodel.ExpensesHistoryViewModel
-import com.lsimanenka.financetracker.ui.viewmodel.TransactionListState
+import com.lsimanenka.financetracker.ui.viewmodel.HistoryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 @SuppressLint("NewApi")
 @Composable
-fun ExpensesHistoryScreen(
-    accountId: Int,
+fun HistoryScreen(
     onTransactionClick: (Int) -> Unit = {},
-    viewModel: ExpensesHistoryViewModel = hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel(),
+    isIncome: Boolean
 ) {
-    LaunchedEffect(accountId) {
-        viewModel.setAccountId(accountId)
+    LaunchedEffect(Unit) {
+        //viewModel.setAccountId(accountId)
+        viewModel.setIsIncome(isIncome)
     }
 
     val uiState by viewModel.state
@@ -92,6 +90,7 @@ fun ExpensesHistoryScreen(
             trailContent = endDate.format(dateFmt),
             onClick = { showEndPicker = true }
         )
+
         val total = uiState.transactions
             .sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
         HeaderListItem(

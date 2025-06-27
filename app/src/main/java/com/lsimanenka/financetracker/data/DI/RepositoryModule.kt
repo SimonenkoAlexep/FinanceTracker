@@ -1,16 +1,15 @@
 package com.lsimanenka.financetracker.data.DI
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.lsimanenka.financetracker.data.network.TransactionsApi
-import com.lsimanenka.financetracker.data.repository.TransactionsRepository
-import com.lsimanenka.financetracker.data.repository.TransactionsRepositoryImpl
+import com.lsimanenka.financetracker.data.repository.account.AccountRepository
+import com.lsimanenka.financetracker.data.repository.account.AccountRepositoryImpl
+import com.lsimanenka.financetracker.data.repository.categories.CategoriesRepository
+import com.lsimanenka.financetracker.data.repository.categories.CategoriesRepositoryImpl
+import com.lsimanenka.financetracker.data.repository.transaction.TransactionsRepository
+import com.lsimanenka.financetracker.data.repository.transaction.TransactionsRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 
@@ -21,5 +20,16 @@ abstract class RepositoryModule {
     abstract fun bindTransactionsRepo(
         impl: TransactionsRepositoryImpl
     ): TransactionsRepository
+
+    @Binds @Singleton
+    abstract fun bindAccountRepo(
+        impl: AccountRepositoryImpl
+    ): AccountRepository
+
+    @Binds @Singleton
+    abstract fun bindCategoriesRepo(
+        impl: CategoriesRepositoryImpl
+    ): CategoriesRepository
+
 }
 
