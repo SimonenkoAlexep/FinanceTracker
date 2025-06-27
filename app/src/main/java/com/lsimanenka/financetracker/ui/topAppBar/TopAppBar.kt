@@ -37,13 +37,12 @@ fun TopBarFor(
                 }
             )
         }
-        // если нужно, аналогично для Income/Account:
         Routes.INCOME -> {
             MyTopAppBar(
                 title = "Доходы сегодня",
                 painterTrail = painterResource(R.drawable.ic_history),
-                iconDescTrail = "История доходов",
-                onActionClickTrail = { /* аналогично */ }
+                iconDescTrail = "История",
+                onActionClickTrail = { navController.navigate(Routes.INCOME_HISTORY) }
             )
         }
 
@@ -70,6 +69,17 @@ fun TopBarFor(
                 painterResource(R.drawable.ic_back_arrow),
                 "Назад",
                 { navController.navigate(Routes.EXPENSES) },
+                painterResource(R.drawable.ic_statistics),
+                "Статистика",
+            )
+        }
+
+        Routes.INCOME_HISTORY -> {
+            MyTopAppBar(
+                "Моя история",
+                painterResource(R.drawable.ic_back_arrow),
+                "Назад",
+                { navController.navigate(Routes.INCOME) },
                 painterResource(R.drawable.ic_statistics),
                 "Статистика",
             )

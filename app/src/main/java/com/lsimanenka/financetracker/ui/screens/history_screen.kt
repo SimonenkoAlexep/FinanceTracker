@@ -10,46 +10,39 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
 import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
 import com.lsimanenka.financetracker.ui.ListItem.ListItem
-import com.lsimanenka.financetracker.ui.theme.LightColors
-import com.lsimanenka.financetracker.ui.viewmodel.ExpensesHistoryViewModel
-import com.lsimanenka.financetracker.ui.viewmodel.TransactionListState
+import com.lsimanenka.financetracker.ui.viewmodel.HistoryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 @SuppressLint("NewApi")
 @Composable
-fun ExpensesHistoryScreen(
-    accountId: Int,
+fun HistoryScreen(
     onTransactionClick: (Int) -> Unit = {},
-    viewModel: ExpensesHistoryViewModel = hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel(),
+    isIncome: Boolean
 ) {
-    // Передаём VM номер счета при старте
-    LaunchedEffect(accountId) {
-        viewModel.setAccountId(accountId)
+    LaunchedEffect(Unit) {
+        //viewModel.setAccountId(accountId)
+        viewModel.setIsIncome(isIncome)
     }
 
-    // Слушаем текущее состояние экрана
     val uiState by viewModel.state
 
-    // Слушаем диапазон дат из VM
     val startDate by viewModel.startDate.collectAsState()
-    val endDate   by viewModel.endDate.collectAsState()
+    val endDate by viewModel.endDate.collectAsState()
 
-    // Локальные стейты для показа DatePickerDialog
     var showStartPicker by remember { mutableStateOf(false) }
-    var showEndPicker   by remember { mutableStateOf(false) }
+    var showEndPicker by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val dateFmt = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
-    // DatePickerDialog для выбора начала
     if (showStartPicker) {
         val cal = Calendar.getInstance().apply {
             set(startDate.year, startDate.monthValue - 1, startDate.dayOfMonth)
@@ -68,7 +61,6 @@ fun ExpensesHistoryScreen(
         }.show()
     }
 
-    // DatePickerDialog для выбора конца
     if (showEndPicker) {
         val cal = Calendar.getInstance().apply {
             set(endDate.year, endDate.monthValue - 1, endDate.dayOfMonth)
@@ -88,57 +80,49 @@ fun ExpensesHistoryScreen(
     }
 
     Column(Modifier.fillMaxSize()) {
-        // 1) Заголовки с выбором дат и общей суммой
         HeaderListItem(
-            content      = "Начало",
+            content = "Начало",
             trailContent = startDate.format(dateFmt),
-            trail        = { IconButtonTrail(R.drawable.ic_more_vert) },
-            onClick      = { showStartPicker = true }
+            onClick = { showStartPicker = true }
         )
         HeaderListItem(
-            content      = "Конец",
+            content = "Конец",
             trailContent = endDate.format(dateFmt),
-            trail        = { IconButtonTrail(R.drawable.ic_more_vert) },
-            onClick      = { showEndPicker = true }
+            onClick = { showEndPicker = true }
         )
-        // Считаем сумму уже отфильтрованных транзакций (если есть)
-        if (uiState.transactions.isNotEmpty()) {
-            val total = uiState.transactions
-                .sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
-            HeaderListItem(
-                content = "Сумма",
-                money   = "%,.2f".format(total),
-                color   = LightColors.secondary.copy(alpha = 0.1f)
-            )
-        }
-        Spacer(Modifier.height(8.dp))
 
-        // 2) Основной контент: загрузка, ошибка или список
+        val total = uiState.transactions
+            .sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+        HeaderListItem(
+            content = "Сумма",
+            money = "% .0f".format(total)
+        )
         when {
             uiState.isLoading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
+
             uiState.error.isNotBlank() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Ошибка: ${uiState.error}")
                 }
             }
+
             else -> {
                 LazyColumn(
-                    Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    Modifier.fillMaxSize()
                 ) {
-                    items(uiState.transactions) { tx ->
+                    items(uiState.transactions.reversed()) { tx ->
                         ListItem(
-                            lead         = "\u20BD",
-                            content      = tx.comment ?: "Комментариев нет",
-                            comment      = null,
-                            money        = tx.amount,
+                            lead = tx.category.emoji,
+                            content = tx.category.name,
+                            comment = tx.comment,
+                            money = tx.amount,
                             trailContent = tx.transactionDate.substring(11, 16),
-                            trail        = { IconButtonTrail(R.drawable.ic_more_vert) },
-                            onClick      = { onTransactionClick(tx.id) }
+                            trail = { IconButtonTrail(R.drawable.ic_more_vert) },
+                            onClick = { onTransactionClick(tx.id) }
                         )
                     }
                 }

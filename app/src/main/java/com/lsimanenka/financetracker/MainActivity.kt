@@ -44,25 +44,7 @@ import com.lsimanenka.financetracker.ui.topAppBar.TopBarFor
 import com.lsimanenka.financetracker.ui.theme.LightColors
 import dagger.hilt.android.AndroidEntryPoint
 
-
-/*@Composable
-fun AppEntry() {
-    val navController = rememberNavController()
-
-    NavHost(navController, startDestination = "splash") {
-        composable("splash") {
-            LottieSplashScreen {
-                navController.navigate("main") {
-                    popUpTo("splash") { inclusive = true }
-                }
-            }
-        }
-        composable("main") {
-            FinanceTracker()
-        }
-    }
-}
-*/
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,39 +55,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-/*@Composable
-fun FinanceTracker() {
-    val navController = rememberNavController()
-    val backStack by navController.currentBackStackEntryAsState()
-    val currentRoute = backStack?.destination?.route
-
-    Scaffold(
-        topBar = TopBarFor(navController, currentRoute),
-
-        bottomBar = { BottomNavigationBar(navController) },
-
-        floatingActionButton = {
-            if (currentRoute == NavItem.EXPENSES.route || currentRoute == NavItem.INCOME.route || currentRoute == NavItem.ACCOUNT.route) {
-                FloatingActionButton(
-                    onClick = { /*…*/ },
-                    containerColor = LightColors.primary,
-                    contentColor = LightColors.onPrimary,
-                    modifier = Modifier.size(56.dp),
-                    shape = CircleShape
-                ) { Icon(Icons.Default.Add, "Добавить", modifier = Modifier.size(31.dp)) }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
-
-    ) { innerPadding ->
-        MyNavHost(
-            navController = navController,
-            startDest = NavItem.EXPENSES,
-            modifier = Modifier.padding(innerPadding)
-        )
-    }
-}*/
 
 @Composable
 fun AppEntry() {

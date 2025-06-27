@@ -1,17 +1,44 @@
 package com.lsimanenka.financetracker.data.network
 
+import com.lsimanenka.financetracker.data.model.Account
+import com.lsimanenka.financetracker.data.model.AccountCreateRequest
+import com.lsimanenka.financetracker.data.model.AccountHistoryResponse
+import com.lsimanenka.financetracker.data.model.AccountResponse
+import com.lsimanenka.financetracker.data.model.AccountUpdateRequest
+import com.lsimanenka.financetracker.data.model.Transaction
+import com.lsimanenka.financetracker.data.model.TransactionRequest
 import com.lsimanenka.financetracker.data.model.TransactionResponse
+import okhttp3.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TransactionsApi {
     @GET("transactions/account/{accountId}/period")
     suspend fun getTransactionsForAccountInPeriod(
         @Path("accountId") accountId: Int,
-        startDate: String? = null,
-        endDate: String? = null
+        @Query("startDate") startDate: String? = null,
+        @Query("endDate") endDate: String? = null
     ): List<TransactionResponse>
 
-    /*@POST("transactions")
-    suspend fun create(@Body request: TransactionRequest): TransactionResponse*/
+    @POST("transactions")
+    suspend fun createTransaction(@Body request: TransactionRequest): TransactionResponse
+
+    @GET("transactions/{id}")
+    suspend fun getTransactionById(@Path("id") accoountId: Int): TransactionResponse
+
+    @PUT("transactions/{id}")
+    suspend fun updateTransactionById(
+        @Path("id") accoountId: Int,
+        @Body request: TransactionRequest
+    ): TransactionResponse
+
+    @DELETE("transactions/{id}")
+    suspend fun deleteTransactionById(@Path("id") accoountId: Int): Response
+
+
 }
