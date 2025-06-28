@@ -5,14 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsimanenka.financetracker.common.Resource
-import com.lsimanenka.financetracker.data.AccountAssistant
-import com.lsimanenka.financetracker.data.model.AccountResponse
 import com.lsimanenka.financetracker.data.model.Category
-import com.lsimanenka.financetracker.data.use_case.GetAccountByIdUseCase
 import com.lsimanenka.financetracker.data.use_case.GetCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -26,7 +21,7 @@ data class CategoriesState(
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    getCategoriesUseCase: GetCategoriesUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(CategoriesState())

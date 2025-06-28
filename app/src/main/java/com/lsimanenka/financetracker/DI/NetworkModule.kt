@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.data.DI
+package com.lsimanenka.financetracker.DI
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

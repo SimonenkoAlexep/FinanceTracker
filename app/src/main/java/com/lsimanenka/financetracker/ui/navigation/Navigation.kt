@@ -6,25 +6,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.lsimanenka.financetracker.ui.screens.ExpensesScreen
-import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.screens.AccountScreen
 import com.lsimanenka.financetracker.ui.screens.HistoryScreen
-import com.lsimanenka.financetracker.ui.screens.IncomeScreen
 import com.lsimanenka.financetracker.ui.screens.ItemsScreen
 import com.lsimanenka.financetracker.ui.screens.SettingsScreen
 import com.lsimanenka.financetracker.ui.splash.LottieSplashScreen
-import com.lsimanenka.financetracker.ui.viewmodel.HistoryViewModel
-
-
-enum class NavItem(val route: String, val label: String?, val icon: Int?) {
-    EXPENSES("expenses", "Расходы", R.drawable.ic_expenses),
-    INCOME("income", "Доходы", R.drawable.ic_income),
-    ACCOUNT("account", "Счёт", R.drawable.ic_account),
-    ITEMS("items", "Статьи", R.drawable.ic_items),
-    SETTINGS("settings", "Настройки", R.drawable.ic_settings),
-    EXPENSES_HISTORY("expenses_history", null, null),
-   // SPLASH("splash", null, null)
-}
 
 @Composable
 fun MyNavHost(
@@ -67,27 +53,3 @@ fun MyNavHost(
     }
 }
 
-
-/*@Composable
-fun MyNavHost(navController: NavHostController, startDest: NavItem, modifier: Modifier) {
-    NavHost(navController, startDestination = startDest.route, modifier = modifier) {
-        NavItem.entries.forEach { destination ->
-            composable(destination.route) {
-                when (destination) {
-                    NavItem.ACCOUNT -> AccountScreen()
-                    NavItem.EXPENSES -> ExpensesScreen()
-                    NavItem.INCOME -> IncomeScreen()
-                    NavItem.ITEMS -> ItemsScreen()
-                    NavItem.SETTINGS -> SettingsScreen()
-                    NavItem.EXPENSES_HISTORY  -> HistoryScreen()
-//                    NavItem.SPLASH -> LottieSplashScreen {
-//                        navController.navigate(NavItem.EXPENSES.route) {
-//                            popUpTo(NavItem.SPLASH.route) { inclusive = true }
-//                        }
-//                    }
-                }
-            }
-        }
-
-    }
-}*/

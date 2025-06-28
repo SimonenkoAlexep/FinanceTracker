@@ -1,6 +1,5 @@
 package com.lsimanenka.financetracker.data.use_case
 
-//import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpException
 import android.util.Log
 import com.lsimanenka.financetracker.common.Resource
 import com.lsimanenka.financetracker.data.model.TransactionResponse
@@ -22,7 +21,6 @@ class GetTransactionUseCase @Inject constructor(
                 startDate = startDate,
                 endDate = endDate
             ).filter { it.category.isIncome == isIncome }
-            Log.d("UseCase", "getTrans for $accountId ... isIncome: $isIncome")
             emit(Resource.Success<List<TransactionResponse>>(transactions))
         } catch(e: HttpException) {
             emit(Resource.Error<List<TransactionResponse>>(e.localizedMessage ?: "An unexpected error occured"))

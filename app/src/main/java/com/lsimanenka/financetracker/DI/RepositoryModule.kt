@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.data.DI
+package com.lsimanenka.financetracker.DI
 
 import com.lsimanenka.financetracker.data.repository.account.AccountRepository
 import com.lsimanenka.financetracker.data.repository.account.AccountRepositoryImpl

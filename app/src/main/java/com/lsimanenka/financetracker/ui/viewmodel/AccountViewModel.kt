@@ -32,7 +32,6 @@ class AccountViewModel @Inject constructor(
     val state: State<AccountDetailState> = _state
 
     init {
-        // Когда ассистент отдаёт первый непустой accountId — сразу запросим детали
         accountAssistant.selectedAccountId
             .filterNotNull()
             .flatMapLatest { id ->

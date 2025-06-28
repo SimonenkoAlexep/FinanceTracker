@@ -54,7 +54,6 @@ fun AccountScreen(
             }
 
             else -> {
-                // на случай, если state еще чистый и ничего не запустилось
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Данных пока нет")
                 }
