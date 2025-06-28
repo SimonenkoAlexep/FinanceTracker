@@ -34,7 +34,6 @@ class AccountAssistant @Inject constructor(
                 .firstOrNull()
             firstId?.let {
                 _selectedId.value = it
-               // Log.d("FinanceApp", "Selected account ID (firstOrNull): $it")
             }
         }
     }

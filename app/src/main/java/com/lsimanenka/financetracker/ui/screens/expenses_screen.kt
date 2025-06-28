@@ -19,9 +19,7 @@ import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
 import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
 import com.lsimanenka.financetracker.ui.ListItem.ListItem
 import com.lsimanenka.financetracker.R
-import com.lsimanenka.financetracker.ui.theme.LightColors
 import com.lsimanenka.financetracker.ui.viewmodel.ExpensesViewModel
-import com.lsimanenka.financetracker.ui.viewmodel.HistoryViewModel
 
 @Composable
 fun ExpensesScreen(
@@ -35,17 +33,10 @@ fun ExpensesScreen(
     }
 
     val uiState by viewModel.state
-    val context = LocalContext.current
-
-
-
-
 
     Column(Modifier.fillMaxSize()) {
         val total = uiState.transactions
             .sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
-       //Log.d("FinanceApp", "Selected account ID: ${uiState.transactions[0].category}")
-        //Log.d("FinanceApp", "Selected account ID: ${uiState.transactions[0].category}")
         HeaderListItem(
             content = "Сумма",
             money = "% .0f".format(total)
@@ -76,66 +67,9 @@ fun ExpensesScreen(
                             trail = { IconButtonTrail(R.drawable.ic_more_vert) },
                             onClick = { onTransactionClick(tx.id) }
                         )
-                      //Log.d("FinanceApp", "Selected account ID Screen: ${tx.category}")
                     }
-                    Log.d("FinanceApp", "Selected size Screen: ${uiState.transactions.size}")
                 }
             }
         }
     }
-
-
-
-
-
-
-
- /*   Column {
-
-
-
-
-
-
-
-        HeaderListItem(content = "Всего", money = "436558", color = LightColors.secondary)
-        ListItem(
-            lead = "\uD83D\uDC80",
-            content = "Аренда квартиры",
-            money = "100000",
-            trail = { IconButtonTrail(R.drawable.ic_more_vert) })
-        ListItem(
-            lead = "\uD83C\uDFE0",
-            content = "Аренда квартиры",
-            comment = null,
-            money = "100000",
-            trail = { IconButtonTrail(R.drawable.ic_more_vert) })
-        ListItem(
-            lead = "\uD83C\uDFE0",
-            content = "Аренда квартиры",
-            comment = "Harold",
-            money = "100000",
-            trail = { IconButtonTrail(R.drawable.ic_more_vert) })
-        ListItem(
-            lead = "\uD83C\uDFE0",
-            content = "Аренда квартиры",
-            comment = "Anny",
-            money = "100000",
-            trail = { IconButtonTrail(R.drawable.ic_more_vert) })
-        ListItem(
-            lead = "\uD83C\uDFE0",
-            content = "Аренда квартиры",
-            comment = null,
-            money = "100000",
-            trail = { IconButtonTrail(R.drawable.ic_more_vert) })
-        ListItem(
-            lead = "\uD83C\uDFE0",
-            content = "Аренда квартиры",
-            comment = "Alex",
-            money = "100000",
-            trail = { IconButtonTrail(R.drawable.ic_more_vert) })
-
-    }
-
-*/
 }

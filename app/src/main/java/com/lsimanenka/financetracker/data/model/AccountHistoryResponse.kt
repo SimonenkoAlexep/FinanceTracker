@@ -1,8 +1,6 @@
 package com.lsimanenka.financetracker.data.model
 
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class AccountHistoryResponse(
     val accountId: Int,
     val accountName: String,

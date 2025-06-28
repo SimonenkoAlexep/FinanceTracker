@@ -1,11 +1,5 @@
 package com.lsimanenka.financetracker.data.network
 
-import com.lsimanenka.financetracker.data.model.Account
-import com.lsimanenka.financetracker.data.model.AccountCreateRequest
-import com.lsimanenka.financetracker.data.model.AccountHistoryResponse
-import com.lsimanenka.financetracker.data.model.AccountResponse
-import com.lsimanenka.financetracker.data.model.AccountUpdateRequest
-import com.lsimanenka.financetracker.data.model.Transaction
 import com.lsimanenka.financetracker.data.model.TransactionRequest
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 import okhttp3.Response

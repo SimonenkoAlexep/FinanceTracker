@@ -1,9 +1,7 @@
 package com.lsimanenka.financetracker.data.use_case
 
 import com.lsimanenka.financetracker.common.Resource
-import com.lsimanenka.financetracker.data.model.Account
 import com.lsimanenka.financetracker.data.model.Category
-import com.lsimanenka.financetracker.data.repository.account.AccountRepository
 import com.lsimanenka.financetracker.data.repository.categories.CategoriesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

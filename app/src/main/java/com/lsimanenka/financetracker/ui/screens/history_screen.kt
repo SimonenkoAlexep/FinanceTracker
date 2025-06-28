@@ -28,7 +28,6 @@ fun HistoryScreen(
     isIncome: Boolean
 ) {
     LaunchedEffect(Unit) {
-        //viewModel.setAccountId(accountId)
         viewModel.setIsIncome(isIncome)
     }
 
