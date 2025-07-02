@@ -4,7 +4,7 @@ package com.lsimanenka.financetracker.data.model
 data class AccountResponse(
     val id: Int,
     val name: String,
-    val balance: String,
+    var balance: String,
     val currency: String,
     val incomeStats: List<StatItem>,
     val expenseStats: List<StatItem>,

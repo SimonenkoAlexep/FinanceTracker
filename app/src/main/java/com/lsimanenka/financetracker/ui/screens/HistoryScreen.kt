@@ -15,7 +15,7 @@ import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
 import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
 import com.lsimanenka.financetracker.ui.ListItem.ListItem
-import com.lsimanenka.financetracker.ui.viewmodel.HistoryViewModel
+import com.lsimanenka.financetracker.domain.viewmodel.HistoryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar

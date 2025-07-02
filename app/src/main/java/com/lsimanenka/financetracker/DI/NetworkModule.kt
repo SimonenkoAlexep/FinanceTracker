@@ -1,5 +1,6 @@
 package com.lsimanenka.financetracker.DI
 
+import com.lsimanenka.financetracker.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.lsimanenka.financetracker.common.Constants.BASE_URL
@@ -21,14 +22,15 @@ import javax.inject.Singleton
 object NetworkModule {
 
     //Add your bearer token
-    private const val BEARER_TOKEN = "Bearer "
+    //private const val BEARER_TOKEN = "Bearer 6R9ucF6hNbBS4WwKBannqbQk"
+    private const val apiToken = BuildConfig.API_TOKEN
 
     @Provides
     @Singleton
     fun provideAuthInterceptor(): Interceptor = Interceptor { chain ->
         val newRequest = chain.request()
             .newBuilder()
-            .addHeader("Authorization", BEARER_TOKEN)
+            .addHeader("Authorization", apiToken)
             .build()
         chain.proceed(newRequest)
     }

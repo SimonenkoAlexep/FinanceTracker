@@ -3,13 +3,11 @@ package com.lsimanenka.financetracker.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.lsimanenka.financetracker.ui.screens.ExpensesScreen
-import com.lsimanenka.financetracker.ui.screens.AccountScreen
-import com.lsimanenka.financetracker.ui.screens.HistoryScreen
-import com.lsimanenka.financetracker.ui.screens.ItemsScreen
-import com.lsimanenka.financetracker.ui.screens.SettingsScreen
+import androidx.navigation.navArgument
+import com.lsimanenka.financetracker.ui.screens.*
 import com.lsimanenka.financetracker.ui.splash.LottieSplashScreen
 
 @Composable
@@ -18,9 +16,9 @@ fun MyNavHost(
     modifier: Modifier = Modifier
 ) {
     NavHost(
-        navController     = navController,
-        startDestination  = Routes.SPLASH,
-        modifier          = modifier
+        navController    = navController,
+        startDestination = Routes.SPLASH,
+        modifier         = modifier
     ) {
         composable(Routes.SPLASH) {
             LottieSplashScreen {
@@ -38,6 +36,9 @@ fun MyNavHost(
         composable(Routes.INCOME) {
             ExpensesScreen(isIncome = true)
         }
+        composable(Routes.INCOME_HISTORY) {
+            HistoryScreen(isIncome = true)
+        }
         composable(Routes.ACCOUNT) {
             AccountScreen()
         }
@@ -47,9 +48,11 @@ fun MyNavHost(
         composable(Routes.SETTINGS) {
             SettingsScreen()
         }
-        composable(Routes.INCOME_HISTORY) {
-            HistoryScreen(isIncome = true)
+        composable(
+            route = "${Routes.ACCOUNT_EDIT_BASE}/{accountId}",
+            arguments = listOf(navArgument("accountId") { type = NavType.IntType })
+        ) {
+            AccountEditScreen()
         }
     }
 }
-

@@ -15,99 +15,114 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.navigation.Routes
 import com.lsimanenka.financetracker.ui.theme.LightColors
 
+/** Возможные действия из TopBar */
+enum class TopBarAction { Edit, History, Cancel, Accept }
+
+/**
+ * Универсальный TopAppBar для всех screen-ов.
+ *
+ * @param currentRoute   — navBackStackEntry?.destination?.route
+ * @param onAction       — колбэк на нажатия кнопок
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarFor(
-    navController: NavHostController,
-    currentRoute: String?
+    currentRoute: String?,
+    onAction: (TopBarAction) -> Unit = {}
 ) {
-    when (currentRoute) {
+    val sysUi = rememberSystemUiController()
+    SideEffect { sysUi.setStatusBarColor(LightColors.primary) }
+
+    // Если в route есть “/”, отсечём всё после первого слэша
+    val baseRoute = currentRoute?.substringBefore("/")
+
+    when (baseRoute) {
         Routes.EXPENSES -> {
             MyTopAppBar(
-                title = "Расходы сегодня",
-                painterTrail = painterResource(R.drawable.ic_history),
-                iconDescTrail = "История",
-                onActionClickTrail = {
-                    navController.navigate(Routes.EXPENSES_HISTORY)
-                }
+                title               = "Расходы сегодня",
+                painterTrail        = painterResource(R.drawable.ic_history),
+                iconDescTrail       = "История",
+                onActionClickTrail  = { onAction(TopBarAction.History) }
             )
         }
         Routes.INCOME -> {
             MyTopAppBar(
-                title = "Доходы сегодня",
-                painterTrail = painterResource(R.drawable.ic_history),
-                iconDescTrail = "История",
-                onActionClickTrail = { navController.navigate(Routes.INCOME_HISTORY) }
+                title               = "Доходы сегодня",
+                painterTrail        = painterResource(R.drawable.ic_history),
+                iconDescTrail       = "История",
+                onActionClickTrail  = { onAction(TopBarAction.History) }
             )
         }
-
         Routes.ACCOUNT -> {
             MyTopAppBar(
-                title = "Мой счёт",
-                painterTrail = painterResource(R.drawable.ic_edit),
-                iconDescTrail = "Редактировать",
-                onActionClickTrail = { /*…*/ }
+                title               = "Мой счёт",
+                painterTrail        = painterResource(R.drawable.ic_edit),
+                iconDescTrail       = "Редактировать",
+                onActionClickTrail  = { onAction(TopBarAction.Edit) }
             )
         }
-
         Routes.ITEMS -> {
-            MyTopAppBar("Мои статьи")
+            MyTopAppBar(title = "Мои статьи")
         }
-
         Routes.SETTINGS -> {
-            MyTopAppBar("Настройки")
+            MyTopAppBar(title = "Настройки")
         }
-
         Routes.EXPENSES_HISTORY -> {
             MyTopAppBar(
-                "Моя история",
-                painterResource(R.drawable.ic_back_arrow),
-                "Назад",
-                { navController.navigate(Routes.EXPENSES) },
-                painterResource(R.drawable.ic_statistics),
-                "Статистика",
+                title               = "История расходов",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Назад",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
+                painterTrail        = painterResource(R.drawable.ic_statistics),
+                iconDescTrail       = "Статистика",
+                onActionClickTrail  = { onAction(TopBarAction.History) }
             )
         }
-
         Routes.INCOME_HISTORY -> {
             MyTopAppBar(
-                "Моя история",
-                painterResource(R.drawable.ic_back_arrow),
-                "Назад",
-                { navController.navigate(Routes.INCOME) },
-                painterResource(R.drawable.ic_statistics),
-                "Статистика",
+                title               = "История доходов",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Назад",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
+                painterTrail        = painterResource(R.drawable.ic_statistics),
+                iconDescTrail       = "Статистика",
+                onActionClickTrail  = { onAction(TopBarAction.History) }
             )
         }
-
+        Routes.ACCOUNT_EDIT_BASE -> {
+            MyTopAppBar(
+                title               = "Редактировать счёт",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Отмена",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
+                painterTrail        = painterResource(R.drawable.ic_accept),
+                iconDescTrail       = "Принять",
+                onActionClickTrail  = { onAction(TopBarAction.Accept) }
+            )
+        }
         else -> {
+            // Пустышка высотой AppBar’а
             Spacer(modifier = Modifier.height(56.dp))
         }
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(
+private fun MyTopAppBar(
     title: String,
-    painterLead: Painter? = null,
-    iconDescLead: String? = null,
+    painterLead: Painter?         = null,
+    iconDescLead: String?         = null,
     onActionClickLead: () -> Unit = {},
-    painterTrail: Painter? = null,
-    iconDescTrail: String? = null,
-    onActionClickTrail: () -> Unit = {},
+    painterTrail: Painter?        = null,
+    iconDescTrail: String?        = null,
+    onActionClickTrail: () -> Unit = {}
 ) {
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(LightColors.primary)
-    }
-
     CenterAlignedTopAppBar(
         title = {
             Text(title, fontSize = 22.sp, color = LightColors.onSecondary)
@@ -127,8 +142,8 @@ fun MyTopAppBar(
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = LightColors.primary,
-            titleContentColor = LightColors.onSecondary
+            containerColor     = LightColors.primary,
+            titleContentColor  = LightColors.onSecondary
         )
     )
 }
