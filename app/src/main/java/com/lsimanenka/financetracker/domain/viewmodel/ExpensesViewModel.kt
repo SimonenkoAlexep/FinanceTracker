@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.ui.viewmodel
+package com.lsimanenka.financetracker.domain.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

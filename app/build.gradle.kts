@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.application)
@@ -5,6 +7,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
 }
+
+
 
 android {
     namespace = "com.lsimanenka.financetracker"
@@ -17,6 +21,10 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val properties = Properties().apply {
+            load(rootProject.file("local.properties").inputStream())
+        }
+        buildConfigField("String", "API_TOKEN", "\"${properties.getProperty("API_TOKEN")}\"")
     }
 
     compileOptions {
@@ -29,6 +37,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

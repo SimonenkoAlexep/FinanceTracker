@@ -15,13 +15,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.lsimanenka.financetracker.data.CurrencyAssistant
 import com.lsimanenka.financetracker.ui.theme.LightColors
+import com.lsimanenka.financetracker.domain.viewmodel.AccountEditViewModel
+import com.lsimanenka.financetracker.domain.viewmodel.AccountViewModel
 
 private const val paddingInListItem: Int = 8
 
@@ -35,8 +42,13 @@ private fun GeneralListItem(
     trail: @Composable (() -> Unit)? = null,
     color: Color = Color.White,
     trailContent: String? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    viewModel: AccountViewModel = hiltViewModel(),
+    modifier: Modifier? = null,
 ) {
+    val currencyFlow = remember { viewModel.currency }
+    val currency by currencyFlow.collectAsState()
+    val uiState by viewModel.state
     Row(
 
         modifier = Modifier
@@ -83,7 +95,7 @@ private fun GeneralListItem(
         if (money != null && trailContent != null) {
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "$money₽",
+                    text = "$money" + currency,
                     fontSize = 16.sp,
                     modifier = Modifier.padding(horizontal = paddingInListItem.dp),
                     textAlign = TextAlign.End
@@ -98,7 +110,7 @@ private fun GeneralListItem(
             }
         } else if (money != null) {
             Text(
-                text = "$money₽",
+                text = "$money" + currency,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(horizontal = paddingInListItem.dp),
 
@@ -127,7 +139,8 @@ fun HeaderListItem(
     trailContent: String? = null,
     trail: @Composable (() -> Unit)? = null,
     color: Color = LightColors.secondary,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    modifier: Modifier? = null
 ) {
     GeneralListItem(
         height = 56,
@@ -149,7 +162,8 @@ fun ListItem(
     money: String? = null,
     trailContent: String? = null,
     trail: @Composable (() -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    modifier: Modifier? = null
 ) {
     GeneralListItem(
         height = 72,
@@ -159,6 +173,7 @@ fun ListItem(
         trailContent = trailContent,
         trail = trail,
         comment = comment,
-        onClick = onClick
+        onClick = onClick,
+        modifier = modifier
     )
 }

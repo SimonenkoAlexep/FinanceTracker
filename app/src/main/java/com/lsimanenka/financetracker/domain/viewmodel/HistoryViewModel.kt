@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.ui.viewmodel
+package com.lsimanenka.financetracker.domain.viewmodel
 
 import android.os.Build
 import android.util.Log

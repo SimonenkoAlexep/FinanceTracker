@@ -1,20 +1,17 @@
 package com.lsimanenka.financetracker.ui.screens
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
-import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
-import com.lsimanenka.financetracker.R
-import com.lsimanenka.financetracker.ui.viewmodel.AccountViewModel
+import com.lsimanenka.financetracker.ui.topAppBar.TopBarAction
+import com.lsimanenka.financetracker.ui.topAppBar.TopBarFor
+import com.lsimanenka.financetracker.ui.navigation.Routes
 import com.lsimanenka.financetracker.ui.theme.LightColors
+import com.lsimanenka.financetracker.domain.viewmodel.AccountViewModel
 
 @Composable
 fun AccountScreen(
@@ -29,33 +26,27 @@ fun AccountScreen(
                     CircularProgressIndicator()
                 }
             }
-
             uiState.error.isNotBlank() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Ошибка: ${uiState.error}")
                 }
             }
-
             uiState.account != null -> {
-                val balance = uiState.account!!.balance.toDoubleOrNull()
                 HeaderListItem(
-                    lead = "\uD83D\uDCB0",
+                    lead    = "💰",
                     content = "Баланс",
-                    money = if (balance != null) "%.2f".format(balance) else "—",
-                    trail = { IconButtonTrail(R.drawable.ic_more_vert) },
-                    color = LightColors.secondary
+                    money   = uiState.account!!.balance,
+                    color   = LightColors.surface
                 )
                 HeaderListItem(
                     content = "Валюта",
-                    money = "",
-                    trail = { IconButtonTrail(R.drawable.ic_more_vert) },
-                    color = LightColors.secondary
+                    trailContent = uiState.account!!.currency,
+                    color   = LightColors.surface
                 )
             }
-
             else -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Данных пока нет")
+                    Text("Данных нет")
                 }
             }
         }
