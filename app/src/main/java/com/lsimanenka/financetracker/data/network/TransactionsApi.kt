@@ -23,16 +23,16 @@ interface TransactionsApi {
     suspend fun createTransaction(@Body request: TransactionRequest): TransactionResponse
 
     @GET("transactions/{id}")
-    suspend fun getTransactionById(@Path("id") accoountId: Int): TransactionResponse
+    suspend fun getTransactionById(@Path("id") accountId: Int): TransactionResponse
 
     @PUT("transactions/{id}")
     suspend fun updateTransactionById(
-        @Path("id") accoountId: Int,
+        @Path("id") accountId: Int,
         @Body request: TransactionRequest
     ): TransactionResponse
 
     @DELETE("transactions/{id}")
-    suspend fun deleteTransactionById(@Path("id") accoountId: Int): Response
+    suspend fun deleteTransactionById(@Path("id") accountId: Int)
 
 
 }

@@ -13,12 +13,13 @@ import com.lsimanenka.financetracker.ui.splash.LottieSplashScreen
 @Composable
 fun MyNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    registerSave: (() -> Unit) -> Unit
 ) {
     NavHost(
-        navController    = navController,
+        navController = navController,
         startDestination = Routes.SPLASH,
-        modifier         = modifier
+        modifier = modifier
     ) {
         composable(Routes.SPLASH) {
             LottieSplashScreen {
@@ -31,10 +32,20 @@ fun MyNavHost(
             HistoryScreen(isIncome = false)
         }
         composable(Routes.EXPENSES) {
-            ExpensesScreen(isIncome = false)
+            ExpensesScreen(
+                isIncome = false,
+                onTransactionClick = { txId ->
+                    navController.navigate(Routes.navToEditTransaction(txId))
+                }
+            )
         }
         composable(Routes.INCOME) {
-            ExpensesScreen(isIncome = true)
+            ExpensesScreen(
+                isIncome           = true,
+                onTransactionClick = { txId ->
+                    navController.navigate(Routes.navToEditTransaction(txId))
+                }
+            )
         }
         composable(Routes.INCOME_HISTORY) {
             HistoryScreen(isIncome = true)
@@ -48,11 +59,29 @@ fun MyNavHost(
         composable(Routes.SETTINGS) {
             SettingsScreen()
         }
-        composable(
-            route = "${Routes.ACCOUNT_EDIT_BASE}/{accountId}",
-            arguments = listOf(navArgument("accountId") { type = NavType.IntType })
-        ) {
-            AccountEditScreen()
+        composable(Routes.ACCOUNT_EDIT) {
+            AccountEditScreen(registerSave, navController)
         }
+
+        composable(Routes.TRANSACTION_CREATE) {
+            TransactionScreen(
+                transactionId = null,
+                registerSave  = registerSave,
+                navController = navController
+            )
+        }
+
+        composable(
+            route = Routes.TRANSACTION_EDIT_ROUTE,
+            arguments = listOf(navArgument("transactionId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val txId = backStackEntry.arguments!!.getInt("transactionId")
+            TransactionScreen(
+                transactionId = txId,
+                registerSave  = registerSave,
+                navController = navController
+            )
+        }
+
     }
 }

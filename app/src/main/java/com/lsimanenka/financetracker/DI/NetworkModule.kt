@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.DI
+package com.lsimanenka.financetracker.di
 
 import com.lsimanenka.financetracker.BuildConfig
 import com.google.gson.Gson
@@ -9,16 +9,17 @@ import com.lsimanenka.financetracker.data.network.CategoriesApi
 import com.lsimanenka.financetracker.data.network.TransactionsApi
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+//import dagger.hilt.InstallIn
+//import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+//@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     //Add your bearer token
@@ -43,10 +44,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: Interceptor): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
+    fun provideOkHttpClient(
+        authInterceptor: Interceptor
+    ): OkHttpClient {
+        // interceptor для логов
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)    // 1) твой auth
+            .addInterceptor(logging)            // 2) логирование HTTP
             .build()
+    }
 
     @Provides
     @Singleton

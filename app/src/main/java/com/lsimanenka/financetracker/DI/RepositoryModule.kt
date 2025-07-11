@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.DI
+package com.lsimanenka.financetracker.di
 
 import com.lsimanenka.financetracker.data.repository.account.AccountRepository
 import com.lsimanenka.financetracker.data.repository.account.AccountRepositoryImpl
@@ -8,13 +8,13 @@ import com.lsimanenka.financetracker.data.repository.transaction.TransactionsRep
 import com.lsimanenka.financetracker.data.repository.transaction.TransactionsRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+//import dagger.hilt.InstallIn
+//import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
 @Module
-@InstallIn(SingletonComponent::class)
+//@InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds @Singleton
     abstract fun bindTransactionsRepo(

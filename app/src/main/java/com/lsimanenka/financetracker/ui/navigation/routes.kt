@@ -9,8 +9,10 @@ object Routes {
     const val ACCOUNT = "account"
     const val ITEMS = "items"
     const val SETTINGS = "settings"
-    const val ACCOUNT_EDIT_BASE = "account_edit"
-    const val ACCOUNT_EDIT_ARG = "$ACCOUNT_EDIT_BASE/{accountId}"
+    const val ACCOUNT_EDIT = "account_edit"
+    const val TRANSACTION_CREATE = "transaction_create"
+    const val TRANSACTION_EDIT     = "transaction_edit"
+    const val TRANSACTION_EDIT_ROUTE = "$TRANSACTION_EDIT/{transactionId}"
 
-    fun accountEdit(accountId: Int) = "$ACCOUNT_EDIT_BASE/$accountId"
+    fun navToEditTransaction(id: Int) = "transaction_edit/$id"
 }

@@ -8,14 +8,14 @@ import com.lsimanenka.financetracker.common.Resource
 import com.lsimanenka.financetracker.data.AccountAssistant
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 import com.lsimanenka.financetracker.data.use_case.GetTransactionUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+//import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-@HiltViewModel
+//@HiltViewModel
 class ExpensesViewModel @Inject constructor(
     private val getTransactionUseCase: GetTransactionUseCase,
     accountAssistant: AccountAssistant

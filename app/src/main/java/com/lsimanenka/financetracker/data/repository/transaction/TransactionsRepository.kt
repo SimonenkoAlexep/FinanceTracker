@@ -16,11 +16,11 @@ interface TransactionsRepository {
     suspend fun getTransactionById(accountId: Int): TransactionResponse
 
     suspend fun updateTransactionById(
-        accoountId: Int,
+        accountId: Int,
         request: TransactionRequest
     ): TransactionResponse
 
-    suspend fun deleteTransactionById(accoountId: Int): Response
+    suspend fun deleteTransactionById(accountId: Int)
 
 
 }

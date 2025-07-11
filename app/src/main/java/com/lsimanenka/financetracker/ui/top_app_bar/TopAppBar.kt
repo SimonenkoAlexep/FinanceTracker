@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.ui.topAppBar
+package com.lsimanenka.financetracker.ui.top_app_bar
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -21,7 +21,7 @@ import com.lsimanenka.financetracker.ui.navigation.Routes
 import com.lsimanenka.financetracker.ui.theme.LightColors
 
 /** Возможные действия из TopBar */
-enum class TopBarAction { Edit, History, Cancel, Accept }
+enum class TopBarAction { EditAccount, History, Cancel, Accept }
 
 /**
  * Универсальный TopAppBar для всех screen-ов.
@@ -38,7 +38,6 @@ fun TopBarFor(
     val sysUi = rememberSystemUiController()
     SideEffect { sysUi.setStatusBarColor(LightColors.primary) }
 
-    // Если в route есть “/”, отсечём всё после первого слэша
     val baseRoute = currentRoute?.substringBefore("/")
 
     when (baseRoute) {
@@ -63,7 +62,7 @@ fun TopBarFor(
                 title               = "Мой счёт",
                 painterTrail        = painterResource(R.drawable.ic_edit),
                 iconDescTrail       = "Редактировать",
-                onActionClickTrail  = { onAction(TopBarAction.Edit) }
+                onActionClickTrail  = { onAction(TopBarAction.EditAccount) }
             )
         }
         Routes.ITEMS -> {
@@ -94,9 +93,31 @@ fun TopBarFor(
                 onActionClickTrail  = { onAction(TopBarAction.History) }
             )
         }
-        Routes.ACCOUNT_EDIT_BASE -> {
+        Routes.ACCOUNT_EDIT -> {
             MyTopAppBar(
                 title               = "Редактировать счёт",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Отмена",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
+                painterTrail        = painterResource(R.drawable.ic_accept),
+                iconDescTrail       = "Принять",
+                onActionClickTrail  = { onAction(TopBarAction.Accept) }
+            )
+        }
+        Routes.TRANSACTION_EDIT -> {
+            MyTopAppBar(
+                title = "Мои расходы",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Отмена",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
+                painterTrail        = painterResource(R.drawable.ic_accept),
+                iconDescTrail       = "Принять",
+                onActionClickTrail  = { onAction(TopBarAction.Accept) }
+            )
+        }
+        Routes.TRANSACTION_CREATE -> {
+            MyTopAppBar(
+                title = "Мои расходы",
                 painterLead         = painterResource(R.drawable.ic_back_arrow),
                 iconDescLead        = "Отмена",
                 onActionClickLead   = { onAction(TopBarAction.Cancel) },

@@ -36,7 +36,7 @@ interface AccountApi {
     @DELETE("accounts/{id}")
     suspend fun deleteAccountById(
         @Path("id") accountId: Int
-    ): Response
+    )
 
     @GET("accounts/{id}/history")
     suspend fun getAccountByIdHistory(

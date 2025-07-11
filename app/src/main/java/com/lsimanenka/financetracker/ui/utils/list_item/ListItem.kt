@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.ui.ListItem
+package com.lsimanenka.financetracker.ui.utils.list_item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,11 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.lsimanenka.financetracker.data.CurrencyAssistant
+import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.hilt.navigation.compose.hiltViewModel
 import com.lsimanenka.financetracker.ui.theme.LightColors
-import com.lsimanenka.financetracker.domain.viewmodel.AccountEditViewModel
+//import com.lsimanenka.financetracker.domain.viewmodel.AccountEditViewModel
 import com.lsimanenka.financetracker.domain.viewmodel.AccountViewModel
+import com.lsimanenka.financetracker.ui.LocalAppComponent
 
 private const val paddingInListItem: Int = 8
 
@@ -43,9 +44,12 @@ private fun GeneralListItem(
     color: Color = Color.White,
     trailContent: String? = null,
     onClick: (() -> Unit)? = null,
-    viewModel: AccountViewModel = hiltViewModel(),
+    //viewModel: AccountViewModel = hiltViewModel(),
     modifier: Modifier? = null,
 ) {
+
+    val factory = LocalAppComponent.current.viewModelFactory().get()
+    val viewModel: AccountViewModel = viewModel(factory = factory)
     val currencyFlow = remember { viewModel.currency }
     val currency by currencyFlow.collectAsState()
     val uiState by viewModel.state

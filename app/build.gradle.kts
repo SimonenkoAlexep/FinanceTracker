@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.dagger.hilt.android")
+    //id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
 }
 
@@ -42,9 +42,12 @@ android {
 }
 
 dependencies {
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-compiler:2.48")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    //implementation("com.google.dagger:hilt-android:2.48")
+    //kapt("com.google.dagger:hilt-compiler:2.48")
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+    //implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -55,7 +58,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation(libs.material3)
     implementation("androidx.navigation:navigation-compose:2.6.0")
     implementation("com.airbnb.android:lottie-compose:6.0.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.1-alpha")
