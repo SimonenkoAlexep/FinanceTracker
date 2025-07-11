@@ -9,7 +9,7 @@ import com.lsimanenka.financetracker.data.AccountAssistant
 import com.lsimanenka.financetracker.data.CurrencyAssistant
 import com.lsimanenka.financetracker.data.model.AccountResponse
 import com.lsimanenka.financetracker.data.use_case.GetAccountByIdUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+//import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
@@ -22,7 +22,7 @@ data class AccountDetailState(
     val error: String = ""
 )
 
-@HiltViewModel
+//@HiltViewModel
 class AccountViewModel @Inject constructor(
     private val getAccountByIdUseCase: GetAccountByIdUseCase,
     accountAssistant: AccountAssistant,

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.lsimanenka.financetracker.common.Resource
 import com.lsimanenka.financetracker.data.model.Category
 import com.lsimanenka.financetracker.data.use_case.GetCategoriesUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+//import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -19,7 +19,7 @@ data class CategoriesState(
     val error: String = ""
 )
 
-@HiltViewModel
+//@HiltViewModel
 class CategoriesViewModel @Inject constructor(
     getCategoriesUseCase: GetCategoriesUseCase
 ) : ViewModel() {

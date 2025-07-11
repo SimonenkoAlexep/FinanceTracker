@@ -28,7 +28,7 @@ class AccountRepositoryImpl @Inject constructor(
         return api.updateAccountById(accountId = accountId, request = request)
     }
 
-    override suspend fun deleteAccountById(accountId: Int): Response {
+    override suspend fun deleteAccountById(accountId: Int) {
         return api.deleteAccountById(accountId = accountId)
     }
 

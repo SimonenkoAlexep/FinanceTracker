@@ -2,9 +2,9 @@ package com.lsimanenka.financetracker.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
-import com.lsimanenka.financetracker.ui.ListItem.ListItem
-import com.lsimanenka.financetracker.ui.ListItem.SwitchTrail
+import com.lsimanenka.financetracker.ui.utils.list_item.IconButtonTrail
+import com.lsimanenka.financetracker.ui.utils.list_item.ListItem
+import com.lsimanenka.financetracker.ui.utils.list_item.SwitchTrail
 import com.lsimanenka.financetracker.R
 
 @Composable

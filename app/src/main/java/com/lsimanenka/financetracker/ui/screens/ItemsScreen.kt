@@ -14,18 +14,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
-import com.lsimanenka.financetracker.ui.ListItem.ListItem
+import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.hilt.navigation.compose.hiltViewModel
+import com.lsimanenka.financetracker.ui.utils.list_item.IconButtonTrail
+import com.lsimanenka.financetracker.ui.utils.list_item.ListItem
 import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.ui.theme.LightColors
 import com.lsimanenka.financetracker.domain.viewmodel.CategoriesViewModel
+import com.lsimanenka.financetracker.ui.LocalAppComponent
 
 
 @Composable
-fun ItemsScreen(
-    viewModel: CategoriesViewModel = hiltViewModel()
-) {
+fun ItemsScreen() {
+
+    val factory = LocalAppComponent.current.viewModelFactory().get()
+    val viewModel: CategoriesViewModel = viewModel(factory = factory)
+
     val uiState by viewModel.state
 
     var searchQuery by rememberSaveable { mutableStateOf("") }

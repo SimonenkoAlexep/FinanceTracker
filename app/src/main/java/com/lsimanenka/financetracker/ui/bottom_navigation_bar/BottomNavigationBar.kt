@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.ui.bottomNavigationBar
+package com.lsimanenka.financetracker.ui.bottom_navigation_bar
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -22,7 +22,7 @@ fun resolveSelectedTab(currentRoute: String?): String? {
     return when (currentRoute) {
         Routes.EXPENSES_HISTORY -> Routes.EXPENSES
         Routes.INCOME_HISTORY -> Routes.INCOME
-        Routes.ACCOUNT_EDIT_BASE -> Routes.ACCOUNT
+        Routes.ACCOUNT_EDIT -> Routes.ACCOUNT
         else -> currentRoute
     }
 }

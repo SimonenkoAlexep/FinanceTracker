@@ -25,7 +25,7 @@ interface AccountRepository {
 
     suspend fun deleteAccountById(
         accountId: Int
-    ): Response
+    )
 
     suspend fun getAccountByIdHistory(
         accountId: Int

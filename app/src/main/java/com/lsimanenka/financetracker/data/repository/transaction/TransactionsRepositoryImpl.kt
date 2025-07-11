@@ -1,5 +1,6 @@
 package com.lsimanenka.financetracker.data.repository.transaction
 
+import android.util.Log
 import com.lsimanenka.financetracker.data.model.TransactionRequest
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 import com.lsimanenka.financetracker.data.network.TransactionsApi
@@ -24,21 +25,22 @@ class TransactionsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createTransaction(request: TransactionRequest): TransactionResponse {
+        Log.d("HELP", "${request.amount}")
         return api.createTransaction(request = request)
     }
 
-    override suspend fun getTransactionById(accoountId: Int): TransactionResponse {
-        return api.getTransactionById(accoountId = accoountId)
+    override suspend fun getTransactionById(accountId: Int): TransactionResponse {
+        return api.getTransactionById(accountId = accountId)
     }
 
     override suspend fun updateTransactionById(
-        accoountId: Int,
+        accountId: Int,
         request: TransactionRequest
     ): TransactionResponse {
-        return api.updateTransactionById(accoountId = accoountId, request = request)
+        return api.updateTransactionById(accountId = accountId, request = request)
     }
 
-    override suspend fun deleteTransactionById(accoountId: Int): Response {
-        return api.deleteTransactionById(accoountId = accoountId)
+    override suspend fun deleteTransactionById(accountId: Int) {
+        return api.deleteTransactionById(accountId = accountId)
     }
 }

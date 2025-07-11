@@ -1,4 +1,4 @@
-package com.lsimanenka.financetracker.ui.ListItem
+package com.lsimanenka.financetracker.ui.utils.list_item
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

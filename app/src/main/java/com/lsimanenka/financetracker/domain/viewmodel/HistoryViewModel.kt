@@ -11,7 +11,7 @@ import com.lsimanenka.financetracker.common.Resource
 import com.lsimanenka.financetracker.data.AccountAssistant
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 import com.lsimanenka.financetracker.data.use_case.GetTransactionUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+//import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -26,7 +26,7 @@ data class TransactionListState(
     val error: String = ""
 )
 
-@HiltViewModel
+//@HiltViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 class HistoryViewModel @Inject constructor(
     private val getTransactionUseCase: GetTransactionUseCase,

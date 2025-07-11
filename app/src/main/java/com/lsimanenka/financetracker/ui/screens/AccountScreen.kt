@@ -4,19 +4,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
-import com.lsimanenka.financetracker.ui.topAppBar.TopBarAction
-import com.lsimanenka.financetracker.ui.topAppBar.TopBarFor
-import com.lsimanenka.financetracker.ui.navigation.Routes
+import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.hilt.navigation.compose.hiltViewModel
+import com.lsimanenka.financetracker.ui.utils.list_item.HeaderListItem
 import com.lsimanenka.financetracker.ui.theme.LightColors
 import com.lsimanenka.financetracker.domain.viewmodel.AccountViewModel
+import com.lsimanenka.financetracker.ui.LocalAppComponent
 
 @Composable
-fun AccountScreen(
-    viewModel: AccountViewModel = hiltViewModel()
-) {
+fun AccountScreen() {
+
+    val factory = LocalAppComponent.current.viewModelFactory().get()
+    val viewModel: AccountViewModel = viewModel(factory = factory)
+
     val uiState by viewModel.state
 
     Column(Modifier.fillMaxSize()) {
@@ -26,24 +26,27 @@ fun AccountScreen(
                     CircularProgressIndicator()
                 }
             }
+
             uiState.error.isNotBlank() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Ошибка: ${uiState.error}")
                 }
             }
+
             uiState.account != null -> {
                 HeaderListItem(
-                    lead    = "💰",
+                    lead = "💰",
                     content = "Баланс",
-                    money   = uiState.account!!.balance,
-                    color   = LightColors.surface
+                    money = uiState.account!!.balance,
+                    color = LightColors.surface
                 )
                 HeaderListItem(
                     content = "Валюта",
-                    trailContent = uiState.account!!.currency,
-                    color   = LightColors.surface
+                    money = "",
+                    color = LightColors.surface
                 )
             }
+
             else -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Данных нет")

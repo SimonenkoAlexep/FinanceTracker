@@ -10,12 +10,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.hilt.navigation.compose.hiltViewModel
 import com.lsimanenka.financetracker.R
-import com.lsimanenka.financetracker.ui.ListItem.HeaderListItem
-import com.lsimanenka.financetracker.ui.ListItem.IconButtonTrail
-import com.lsimanenka.financetracker.ui.ListItem.ListItem
+import com.lsimanenka.financetracker.ui.utils.list_item.HeaderListItem
+import com.lsimanenka.financetracker.ui.utils.list_item.IconButtonTrail
+import com.lsimanenka.financetracker.ui.utils.list_item.ListItem
 import com.lsimanenka.financetracker.domain.viewmodel.HistoryViewModel
+import com.lsimanenka.financetracker.ui.LocalAppComponent
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -24,9 +26,12 @@ import java.util.Calendar
 @Composable
 fun HistoryScreen(
     onTransactionClick: (Int) -> Unit = {},
-    viewModel: HistoryViewModel = hiltViewModel(),
     isIncome: Boolean
 ) {
+
+    val factory = LocalAppComponent.current.viewModelFactory().get()
+    val viewModel: HistoryViewModel = viewModel(factory = factory)
+
     LaunchedEffect(Unit) {
         viewModel.setIsIncome(isIncome)
     }
