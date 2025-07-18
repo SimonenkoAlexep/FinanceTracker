@@ -48,13 +48,13 @@ object NetworkModule {
         authInterceptor: Interceptor
     ): OkHttpClient {
         // interceptor для логов
-        val logging = HttpLoggingInterceptor().apply {
+       /* val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
-        }
+        }*/
 
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)    // 1) твой auth
-            .addInterceptor(logging)            // 2) логирование HTTP
+           // .addInterceptor(logging)            // 2) логирование HTTP
             .build()
     }
 

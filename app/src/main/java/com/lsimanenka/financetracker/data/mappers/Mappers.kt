@@ -2,10 +2,12 @@ package com.lsimanenka.financetracker.data.mappers
 
 import com.lsimanenka.financetracker.data.local.entity.AccountDbEntity
 import com.lsimanenka.financetracker.data.local.entity.AccountWithDetails
+import com.lsimanenka.financetracker.data.local.entity.CategoryDbEntity
 import com.lsimanenka.financetracker.data.local.entity.StatItemDbEntity
 import com.lsimanenka.financetracker.data.model.Account
 import com.lsimanenka.financetracker.data.model.AccountResponse
 import com.lsimanenka.financetracker.data.model.AccountUpdateRequest
+import com.lsimanenka.financetracker.data.model.Category
 import com.lsimanenka.financetracker.data.model.StatItem
 
 fun StatItemDbEntity.toStatItem(): StatItem = StatItem(
@@ -62,7 +64,7 @@ fun AccountWithDetails.toAccountDbEntity(): AccountDbEntity =
         name = this.account.name,
         balance = this.account.balance,
         currency = this.account.currency,
-        createdAt = this.account.createdAt  ,
+        createdAt = this.account.createdAt,
         updatedAt = this.account.updatedAt
     )
 
@@ -114,5 +116,23 @@ fun AccountWithDetails.toAccountResponse(): AccountResponse {
         expenseStats = expenseList,
         createdAt = account.createdAt,
         updatedAt = account.updatedAt
+    )
+}
+
+fun Category.toDbEntity(): CategoryDbEntity {
+    return CategoryDbEntity(
+        id = this.id.toLong(),
+        name = this.name,
+        emoji = this.emoji,
+        isIncome = this.isIncome
+    )
+}
+
+fun CategoryDbEntity.toCategory(): Category {
+    return Category(
+        id = this.id.toInt(),
+        name = this.name,
+        emoji = this.emoji,
+        isIncome = this.isIncome
     )
 }
