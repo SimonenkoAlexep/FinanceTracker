@@ -23,7 +23,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     //Add your bearer token
-    //private const val BEARER_TOKEN = "Bearer 6R9ucF6hNbBS4WwKBannqbQk"
+    //private const val BEARER_TOKEN = "Bearer your_token"
     private const val apiToken = BuildConfig.API_TOKEN
 
     @Provides

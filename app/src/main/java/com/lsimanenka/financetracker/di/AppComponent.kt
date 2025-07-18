@@ -1,6 +1,10 @@
 package com.lsimanenka.financetracker.di
 
+import android.app.Application
+import android.content.Context
+import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -9,9 +13,21 @@ import javax.inject.Singleton
         NetworkModule::class,
         RepositoryModule::class,
         ViewModelBindingModule::class,
-        ViewModelFactoryModule::class
+        ViewModelFactoryModule::class,
+        DatabaseModule::class,
+        LocalSourceModule::class,
     ]
 )
 interface AppComponent {
+
+    @Component.Builder
+    interface Builder {
+
+        @BindsInstance
+        fun context(ctx: Context): Builder
+
+        fun build(): AppComponent
+    }
+
     fun viewModelFactory(): javax.inject.Provider<androidx.lifecycle.ViewModelProvider.Factory>
 }
