@@ -5,6 +5,7 @@ import com.lsimanenka.financetracker.data.local.entity.AccountWithDetails
 import com.lsimanenka.financetracker.data.local.entity.StatItemDbEntity
 import com.lsimanenka.financetracker.data.model.Account
 import com.lsimanenka.financetracker.data.model.AccountResponse
+import com.lsimanenka.financetracker.data.model.AccountUpdateRequest
 import com.lsimanenka.financetracker.data.model.StatItem
 
 fun StatItemDbEntity.toStatItem(): StatItem = StatItem(
@@ -25,6 +26,7 @@ fun StatItem.toDbEntity(accountId: Long, type: String): StatItemDbEntity = StatI
 
 fun AccountResponse.toDbEntity(): AccountWithDetails =
     AccountWithDetails(account = AccountDbEntity(
+        id = this.id.toLong(),
         userId = this.id.toLong(),
         name = this.name,
         balance = this.balance,
@@ -55,6 +57,7 @@ fun AccountResponse.toDbEntity(): AccountWithDetails =
 
 fun AccountWithDetails.toAccountDbEntity(): AccountDbEntity =
     AccountDbEntity(
+        id = this.account.id,
         userId = this.account.userId,
         name = this.account.name,
         balance = this.account.balance,
@@ -65,6 +68,7 @@ fun AccountWithDetails.toAccountDbEntity(): AccountDbEntity =
 
 fun Account.toDbEntity(): AccountDbEntity =
     AccountDbEntity(
+        id = this.id.toLong(),
         userId = this.id.toLong(),
         name = this.name,
         balance = this.balance,
@@ -72,6 +76,7 @@ fun Account.toDbEntity(): AccountDbEntity =
         createdAt = this.createdAt,
         updatedAt = this.updatedAt
     )
+
 
 fun AccountDbEntity.toAccount(): Account =
     Account(
@@ -84,6 +89,12 @@ fun AccountDbEntity.toAccount(): Account =
         updatedAt = this.updatedAt
     )
 
+fun AccountDbEntity.toUpdateRequest(): AccountUpdateRequest = AccountUpdateRequest(
+    name = this.name,
+    balance = this.balance,
+    currency = this.currency
+)
+
 
 fun AccountWithDetails.toAccountResponse(): AccountResponse {
     val incomeList = stats
@@ -91,7 +102,7 @@ fun AccountWithDetails.toAccountResponse(): AccountResponse {
         .map { it.toStatItem() }
 
     val expenseList = stats
-        .filter { it.type == "EXPENSE" }
+        .filter { it.type == "EXPENSES" }
         .map { it.toStatItem() }
 
     return AccountResponse(

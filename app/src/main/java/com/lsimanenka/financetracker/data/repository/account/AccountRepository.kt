@@ -30,4 +30,6 @@ interface AccountRepository {
     suspend fun getAccountByIdHistory(
         accountId: Int
     ): AccountHistoryResponse
+
+    suspend fun syncAccounts()
 }

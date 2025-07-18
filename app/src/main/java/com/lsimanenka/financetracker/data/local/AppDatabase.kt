@@ -11,7 +11,7 @@ import com.lsimanenka.financetracker.data.local.entity.StatItemDbEntity
 import com.lsimanenka.financetracker.data.local.entity.TransactionWithDetails
 
 @Database(
-    version = 1,
+    version = 4,
     entities = [
         AccountDbEntity::class,
         CategoryDbEntity::class,

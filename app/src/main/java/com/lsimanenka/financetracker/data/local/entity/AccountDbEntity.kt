@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "account")
 data class AccountDbEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    @PrimaryKey val id: Long,
     @ColumnInfo(name = "user_id")     val userId: Long,
     @ColumnInfo(name = "name")        val name: String,
     @ColumnInfo(name = "balance")     val balance: String,

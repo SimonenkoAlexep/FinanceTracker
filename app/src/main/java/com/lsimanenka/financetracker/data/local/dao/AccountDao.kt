@@ -35,6 +35,12 @@ interface AccountDao {
     @Query("SELECT * FROM account WHERE id = :accountId")
     suspend fun getAccountEntityById(accountId: Long): AccountDbEntity?
 
+   // @Update
+   // suspend fun updateAccount(account: AccountDbEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertAccount(account: AccountDbEntity)
+
     @Update
-    suspend fun updateAccount(account: AccountDbEntity)
+    suspend fun updateStats(stats: List<StatItemDbEntity>)
 }

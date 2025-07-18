@@ -1,6 +1,7 @@
 package com.lsimanenka.financetracker.data.repository.account
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.lsimanenka.financetracker.data.local.dao.AccountDao
 import com.lsimanenka.financetracker.data.local.entity.AccountDbEntity
 import com.lsimanenka.financetracker.data.local.entity.AccountWithDetails
@@ -20,13 +21,26 @@ class AccountLocalDataSource @Inject constructor(
     suspend fun getById(id: Int): AccountWithDetails? =
         dao.getAccountById(id)
 
-    suspend fun saveAccount(entity: AccountDbEntity) {
+    /*suspend fun updateAccount(account: AccountDbEntity) {
+        Log.d("UPDATEBEFORE" ,"${account.userId}, ${account.balance}")
+        return dao.updateAccount(account)
+    }**/
+
+    suspend fun upsertAccount(entity: AccountDbEntity) {
+        Log.d("UPDATEBEFORE" ,"${entity.id}, ${entity.balance}, ${entity.updatedAt}")
+        dao.upsertAccount(entity)
+    }
+
+    suspend fun updateStats(stats: List<StatItemDbEntity>) =
+        dao.updateStats(stats)
+
+   /* suspend fun saveAccount(entity: AccountDbEntity) {
         dao.insert(entity)
     }
 
     suspend fun saveStats(items: List<StatItemDbEntity>) {
         items.forEach { dao.insertStatItem(it) }
-    }
+    }*/
 
     @SuppressLint("NewApi")
     suspend fun updateAccountById(
@@ -45,7 +59,7 @@ class AccountLocalDataSource @Inject constructor(
             updatedAt = now
         )
 
-        dao.updateAccount(updatedEntity)
+        dao.upsertAccount(updatedEntity)
 
         return updatedEntity.toAccount()
     }
