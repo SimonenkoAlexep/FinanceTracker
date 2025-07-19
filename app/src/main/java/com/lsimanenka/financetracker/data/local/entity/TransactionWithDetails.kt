@@ -28,7 +28,7 @@ fun TransactionWithDetails.toDomain(): TransactionResponse {
     return TransactionResponse(
         id             = transaction.id.toInt(),
         account        = AccountBrief(
-            id       = account.id!!.toInt(),
+            id       = account.id.toInt(),
             name     = account.name,
             balance  = account.balance,
             currency = account.currency

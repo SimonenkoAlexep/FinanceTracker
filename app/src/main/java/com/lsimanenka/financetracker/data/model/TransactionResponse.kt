@@ -10,4 +10,4 @@ data class TransactionResponse(
     val comment: String?,
     val createdAt: String,
     val updatedAt: String
-) 
+)
