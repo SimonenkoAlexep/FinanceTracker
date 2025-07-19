@@ -92,6 +92,11 @@ fun AppEntry(
                             //navController.navigate(Routes.ACCOUNT)
                             //}
                         }
+
+                        TopBarAction.Statistics -> {
+                            if (baseRoute == Routes.EXPENSES_HISTORY) navController.navigate(Routes.EXPENSES_STATISTICS)
+                            if (baseRoute == Routes.INCOME_HISTORY) navController.navigate(Routes.INCOME_STATISTICS)
+                        }
                     }
                 }
             }

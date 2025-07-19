@@ -21,7 +21,7 @@ import com.lsimanenka.financetracker.ui.navigation.Routes
 import com.lsimanenka.financetracker.ui.theme.LightColors
 
 /** Возможные действия из TopBar */
-enum class TopBarAction { EditAccount, History, Cancel, Accept }
+enum class TopBarAction { EditAccount, History, Cancel, Accept, Statistics }
 
 /**
  * Универсальный TopAppBar для всех screen-ов.
@@ -79,7 +79,7 @@ fun TopBarFor(
                 onActionClickLead   = { onAction(TopBarAction.Cancel) },
                 painterTrail        = painterResource(R.drawable.ic_statistics),
                 iconDescTrail       = "Статистика",
-                onActionClickTrail  = { onAction(TopBarAction.History) }
+                onActionClickTrail  = { onAction(TopBarAction.Statistics) }
             )
         }
         Routes.INCOME_HISTORY -> {
@@ -90,7 +90,23 @@ fun TopBarFor(
                 onActionClickLead   = { onAction(TopBarAction.Cancel) },
                 painterTrail        = painterResource(R.drawable.ic_statistics),
                 iconDescTrail       = "Статистика",
-                onActionClickTrail  = { onAction(TopBarAction.History) }
+                onActionClickTrail  = { onAction(TopBarAction.Statistics) }
+            )
+        }
+        Routes.EXPENSES_STATISTICS -> {
+            MyTopAppBar(
+                title               = "Анализ",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Назад",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
+            )
+        }
+        Routes.INCOME_STATISTICS -> {
+            MyTopAppBar(
+                title               = "Анализ",
+                painterLead         = painterResource(R.drawable.ic_back_arrow),
+                iconDescLead        = "Назад",
+                onActionClickLead   = { onAction(TopBarAction.Cancel) },
             )
         }
         Routes.ACCOUNT_EDIT -> {

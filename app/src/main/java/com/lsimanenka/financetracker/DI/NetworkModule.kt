@@ -23,7 +23,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     //Add your bearer token
-    //private const val BEARER_TOKEN = "Bearer 6R9ucF6hNbBS4WwKBannqbQk"
+    //private const val BEARER_TOKEN = "Bearer your_token"
     private const val apiToken = BuildConfig.API_TOKEN
 
     @Provides
@@ -48,13 +48,13 @@ object NetworkModule {
         authInterceptor: Interceptor
     ): OkHttpClient {
         // interceptor для логов
-        val logging = HttpLoggingInterceptor().apply {
+       /* val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
-        }
+        }*/
 
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)    // 1) твой auth
-            .addInterceptor(logging)            // 2) логирование HTTP
+           // .addInterceptor(logging)            // 2) логирование HTTP
             .build()
     }
 

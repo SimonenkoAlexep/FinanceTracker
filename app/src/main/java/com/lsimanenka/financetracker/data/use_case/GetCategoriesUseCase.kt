@@ -1,5 +1,6 @@
 package com.lsimanenka.financetracker.data.use_case
 
+import android.util.Log
 import com.lsimanenka.financetracker.common.Resource
 import com.lsimanenka.financetracker.data.model.Category
 import com.lsimanenka.financetracker.data.repository.categories.CategoriesRepository
@@ -16,6 +17,7 @@ class GetCategoriesUseCase @Inject constructor(
         try {
             emit(Resource.Loading())
             val categories = repository.getCategories()
+            //Log.d("CATEGORIES" ,"${categories.first().name}")
             emit(Resource.Success(categories))
         } catch(e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "Ошибка"))
