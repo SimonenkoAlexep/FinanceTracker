@@ -83,5 +83,12 @@ fun MyNavHost(
             )
         }
 
+        composable(Routes.EXPENSES_STATISTICS) {
+            StatisticsScreen(isIncome = false)
+        }
+        composable(Routes.INCOME_STATISTICS) {
+            StatisticsScreen(isIncome = true)
+        }
+
     }
 }

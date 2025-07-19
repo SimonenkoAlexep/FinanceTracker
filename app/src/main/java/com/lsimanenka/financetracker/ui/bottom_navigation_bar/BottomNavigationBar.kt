@@ -23,6 +23,8 @@ fun resolveSelectedTab(currentRoute: String?): String? {
         Routes.EXPENSES_HISTORY -> Routes.EXPENSES
         Routes.INCOME_HISTORY -> Routes.INCOME
         Routes.ACCOUNT_EDIT -> Routes.ACCOUNT
+        Routes.INCOME_STATISTICS ->Routes.INCOME
+        Routes.EXPENSES_STATISTICS -> Routes.EXPENSES
         else -> currentRoute
     }
 }

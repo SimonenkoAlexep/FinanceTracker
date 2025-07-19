@@ -13,6 +13,8 @@ object Routes {
     const val TRANSACTION_CREATE = "transaction_create"
     const val TRANSACTION_EDIT     = "transaction_edit"
     const val TRANSACTION_EDIT_ROUTE = "$TRANSACTION_EDIT/{transactionId}"
+    const val EXPENSES_STATISTICS = "expenses_statistics"
+    const val INCOME_STATISTICS = "income_statistics"
 
     fun navToEditTransaction(id: Int) = "transaction_edit/$id"
 }
