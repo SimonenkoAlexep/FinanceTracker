@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.hilt.navigation.compose.hiltViewModel
 import com.lsimanenka.financetracker.R
@@ -23,14 +24,12 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import kotlin.math.roundToInt
-
 @SuppressLint("NewApi")
 @Composable
 fun StatisticsScreen(
     onTransactionClick: (Int) -> Unit = {},
     isIncome: Boolean
 ) {
-
     val factory = LocalAppComponent.current.viewModelFactory().get()
     val viewModel: HistoryViewModel = viewModel(factory = factory)
 
@@ -39,7 +38,6 @@ fun StatisticsScreen(
     }
 
     val uiState by viewModel.state
-
     val startDate by viewModel.startDate.collectAsState()
     val endDate by viewModel.endDate.collectAsState()
 
@@ -49,7 +47,7 @@ fun StatisticsScreen(
     val context = LocalContext.current
     val dateFmt = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
-    val transactions = viewModel.state.value.transactions
+    val transactions = uiState.transactions
 
     data class CategoryGroup(
         val emoji: String,
@@ -109,59 +107,56 @@ fun StatisticsScreen(
 
     Column(Modifier.fillMaxSize()) {
         ListItem(
-            content = "Начало",
+            content = stringResource(R.string.start_date),
             trailContent = startDate.format(dateFmt),
             onClick = { showStartPicker = true }
         )
         ListItem(
-            content = "Конец",
+            content = stringResource(R.string.end_date),
             trailContent = endDate.format(dateFmt),
             onClick = { showEndPicker = true }
         )
 
-        val total = uiState.transactions
-            .sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+        val total = transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+
         ListItem(
-            content = "Сумма",
+            content = stringResource(R.string.total),
             money = "% .0f".format(total)
         )
+
         when {
             uiState.isLoading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             }
-
             uiState.error.isNotBlank() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Ошибка: вероятно что-то пошло не так(")
+                    Text("${stringResource(R.string.error_prefix)}: ${stringResource(R.string.nothing_found)}")
                 }
             }
-
+            categoryGroups.isEmpty() -> {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(stringResource(R.string.nothing_found))
+                }
+            }
             else -> {
-                if (categoryGroups.isEmpty()) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("В данный период транзакций не было(")
-                    }
-                } else {
-                    LazyColumn(Modifier.fillMaxSize()) {
-                        categoryGroups
-                            .sortedByDescending { it.total }
-                            .forEach { group ->
-                                item {
-                                    ListItem(
-                                        lead         = group.emoji,
-                                        content      = group.name,
-                                        money        = "%.0f".format(group.total),
-                                        trailContent = "${(group.total / total * 100).roundToInt()}%",
-                                        trail        = { IconButtonTrail(R.drawable.ic_more_vert) }
-                                    )
-                                }
+                LazyColumn(Modifier.fillMaxSize()) {
+                    categoryGroups
+                        .sortedByDescending { it.total }
+                        .forEach { group ->
+                            item {
+                                ListItem(
+                                    lead         = group.emoji,
+                                    content      = group.name,
+                                    money        = "%.0f".format(group.total),
+                                    trailContent = "${(group.total / total * 100).roundToInt()}%",
+                                    trail        = { IconButtonTrail(R.drawable.ic_more_vert) }
+                                )
                             }
-                    }
+                        }
                 }
             }
-
         }
     }
 }

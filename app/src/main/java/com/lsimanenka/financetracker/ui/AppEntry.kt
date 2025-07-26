@@ -9,14 +9,17 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 //import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -27,7 +30,8 @@ import com.lsimanenka.financetracker.domain.viewmodel.MainActivityViewModel
 import com.lsimanenka.financetracker.ui.bottom_navigation_bar.BottomNavigationBar
 import com.lsimanenka.financetracker.ui.navigation.MyNavHost
 import com.lsimanenka.financetracker.ui.navigation.Routes
-import com.lsimanenka.financetracker.ui.theme.LightColors
+import com.lsimanenka.financetracker.ui.theme.MyColors
+import com.lsimanenka.financetracker.ui.theme.ThemeManager
 import com.lsimanenka.financetracker.ui.top_app_bar.TopBarAction
 import com.lsimanenka.financetracker.ui.top_app_bar.TopBarFor
 
@@ -64,65 +68,75 @@ fun AppEntry(
 
     val showChrome = route != Routes.SPLASH
 
-    Scaffold(
-        topBar = {
-            if (showChrome) {
-                TopBarFor(
-                    currentRoute = route
-                ) { action ->
-                    when (action) {
-                        TopBarAction.EditAccount -> {
-                            Log.d("AAAAAAAAaa", "$accountId")
-                            navController.navigate(Routes.ACCOUNT_EDIT)
+    //val isDarkTheme by rememberSaveable { mutableStateOf(ThemeManager.loadTheme(LocalContext.current)) }
 
-                        }
+    //MyColors.init(isDarkTheme) // Обновляем палитру
+    MaterialTheme(colorScheme = MyColors.all) {
 
-                        TopBarAction.History -> {
-                            if (baseRoute == Routes.EXPENSES) navController.navigate(Routes.EXPENSES_HISTORY)
-                            if (baseRoute == Routes.INCOME) navController.navigate(Routes.INCOME_HISTORY)
-                        }
+        Scaffold(
+            topBar = {
+                if (showChrome) {
+                    TopBarFor(
+                        currentRoute = route
+                    ) { action ->
+                        when (action) {
+                            TopBarAction.EditAccount -> {
+                                Log.d("AAAAAAAAaa", "$accountId")
+                                navController.navigate(Routes.ACCOUNT_EDIT)
 
-                        TopBarAction.Cancel -> {
-                            navController.popBackStack()
-                        }
+                            }
 
-                        TopBarAction.Accept -> {
-                            //accountEditViewModel?.save {
-                            saveAction()
-                            //navController.navigate(Routes.ACCOUNT)
-                            //}
-                        }
+                            TopBarAction.History -> {
+                                if (baseRoute == Routes.EXPENSES) navController.navigate(Routes.EXPENSES_HISTORY)
+                                if (baseRoute == Routes.INCOME) navController.navigate(Routes.INCOME_HISTORY)
+                            }
 
-                        TopBarAction.Statistics -> {
-                            if (baseRoute == Routes.EXPENSES_HISTORY) navController.navigate(Routes.EXPENSES_STATISTICS)
-                            if (baseRoute == Routes.INCOME_HISTORY) navController.navigate(Routes.INCOME_STATISTICS)
+                            TopBarAction.Cancel -> {
+                                navController.popBackStack()
+                            }
+
+                            TopBarAction.Accept -> {
+                                //accountEditViewModel?.save {
+                                saveAction()
+                                //navController.navigate(Routes.ACCOUNT)
+                                //}
+                            }
+
+                            TopBarAction.Statistics -> {
+                                if (baseRoute == Routes.EXPENSES_HISTORY) navController.navigate(
+                                    Routes.EXPENSES_STATISTICS
+                                )
+                                if (baseRoute == Routes.INCOME_HISTORY) navController.navigate(
+                                    Routes.INCOME_STATISTICS
+                                )
+                            }
                         }
                     }
                 }
-            }
-        },
-        bottomBar = {
-            if (showChrome) BottomNavigationBar(navController)
-        },
-        floatingActionButton = {
-            if (showChrome && (baseRoute == Routes.EXPENSES || baseRoute == Routes.INCOME)) {
-                FloatingActionButton(
-                    onClick = { navController.navigate(Routes.TRANSACTION_CREATE) },
-                    modifier = Modifier.size(56.dp),
-                    containerColor = LightColors.primary,
-                    contentColor = LightColors.onPrimary,
-                    shape = CircleShape
-                ) {
-                    Icon(Icons.Default.Add, "Добавить", Modifier.size(31.dp))
+            },
+            bottomBar = {
+                if (showChrome) BottomNavigationBar(navController)
+            },
+            floatingActionButton = {
+                if (showChrome && (baseRoute == Routes.EXPENSES || baseRoute == Routes.INCOME)) {
+                    FloatingActionButton(
+                        onClick = { navController.navigate(Routes.TRANSACTION_CREATE) },
+                        modifier = Modifier.size(56.dp),
+                        containerColor = MyColors.primary,
+                        contentColor = MyColors.onPrimary,
+                        shape = CircleShape
+                    ) {
+                        Icon(Icons.Default.Add, "Добавить", Modifier.size(31.dp))
+                    }
                 }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
-    ) { innerPadding ->
-        MyNavHost(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding),
-            registerSave = { action -> saveAction = action }
-        )
+            },
+            floatingActionButtonPosition = FabPosition.End
+        ) { innerPadding ->
+            MyNavHost(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding),
+                registerSave = { action -> saveAction = action }
+            )
+        }
     }
 }

@@ -15,6 +15,7 @@ import androidx.work.WorkerFactory
 import com.lsimanenka.financetracker.data.NetworkMonitor
 import com.lsimanenka.financetracker.data.worker.SyncWorker
 import com.lsimanenka.financetracker.data.worker.scheduleSyncOnConnect
+import com.lsimanenka.financetracker.ui.theme.ThemeManager
 
 class FinanceTrackerApplication : Application(), Configuration.Provider {
 
@@ -40,7 +41,7 @@ class FinanceTrackerApplication : Application(), Configuration.Provider {
         )
 
         networkMonitor.startListening {
-            scheduleSyncOnConnect(this)
+            scheduleSyncOnConnect(this, 3)
         }
     }
 
@@ -48,4 +49,6 @@ class FinanceTrackerApplication : Application(), Configuration.Provider {
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
+
+
 }

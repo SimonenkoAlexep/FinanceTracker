@@ -28,12 +28,20 @@ class ExpensesViewModel @Inject constructor(
 
     private val _isIncome = MutableStateFlow<Boolean?>(null)
 
+    private val _trigger = MutableStateFlow(0)
+    val trigger: StateFlow<Int> = _trigger
+
+    fun nextTrigger() {
+        _trigger.value = _trigger.value + 1
+    }
+
 
     init {
         combine(
             accountIdFlow.filterNotNull(),
-            _isIncome.filterNotNull()
-        ) { accountId, isIncome ->
+            _isIncome.filterNotNull(),
+            trigger.filterNotNull()
+        ) { accountId, isIncome, trigger ->
             accountId to isIncome
         }
             .flatMapLatest { (accountId, isIncome) ->

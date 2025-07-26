@@ -1,3 +1,79 @@
 <resources>
     <string name="app_name">FinanceTracker</string>
+    <!-- BottomNavigationBar -->
+    <string name="nav_expenses">Расходы</string>
+    <string name="nav_income">Доходы</string>
+    <string name="nav_account">Счёт</string>
+    <string name="nav_items">Статьи</string>
+    <string name="nav_settings">Настройки</string>
+
+    <!-- AboutAppScreen -->
+    <string name="about_title">О приложении</string>
+    <string name="about_version">Версия</string>
+    <string name="about_last_update">Последнее обновление</string>
+
+    <!-- AccountEditScreen -->
+    <string name="account_name_label">Имя счёта</string>
+    <string name="account_balance_label">Баланс</string>
+    <string name="account_currency_label">Валюта</string>
+    <string name="cancel">Отмена</string>
+
+    <!-- AccountScreen -->
+    <string name="account_error">Ошибка</string>
+    <string name="account_balance">Баланс</string>
+    <string name="account_currency">Валюта</string>
+    <string name="no_data">Данных нет</string>
+
+    <string name="choose_primary_color">Выберите основной цвет</string>
+    <string name="creator_name">Создатель: Алексей Симоненко</string>
+    <string name="total">Сумма</string>
+    <string name="error_prefix">Ошибка</string>
+    <string name="haptics_title">Вибрация при взаимодействии</string>
+    <string name="choose_haptic_effect">Выберите эффект</string>
+    <string name="start_date">Начало</string>
+    <string name="end_date">Конец</string>
+
+    <string name="search_category">Найти статью</string>
+    <string name="loading">Загрузка…</string>
+    <string name="nothing_found">Ничего не найдено</string>
+    <string name="choose_language">Выберите язык</string>
+    <string name="lang_russian">Русский</string>
+    <string name="lang_english">English</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="primary_color">Основной цвет</string>
+    <string name="sound">Звуки</string>
+    <string name="haptics">Хаптики</string>
+    <string name="passcode">Код пароль</string>
+    <string name="sync">Синхронизация</string>
+    <string name="language">Язык</string>
+    <string name="about_app">О программе</string>
+    <string name="creator">Создатель</string>
+
+    <string name="sync_interval_label">Интервал синхронизации: %1$dч</string>
+
+    <string name="date_label">Дата</string>
+    <string name="time_label">Время</string>
+    <string name="account_label">Счёт</string>
+    <string name="amount_label">Сумма</string>
+    <string name="comment_label">Комментарий</string>
+    <string name="comment_placeholder">Введите комментарий</string>
+    <string name="delete">Удалить</string>
+
+    <string name="expenses_today">Расходы сегодня</string>
+    <string name="income_today">Доходы сегодня</string>
+    <string name="account">Мой счёт</string>
+    <string name="items">Мои статьи</string>
+    <string name="settings">Настройки</string>
+    <string name="history">История</string>
+    <string name="statistics">Статистика</string>
+    <string name="accept">Принять</string>
+    <string name="edit">Редактировать</string>
+    <string name="back">Назад</string>
+    <string name="edit_account">Редактировать счёт</string>
+    <string name="transaction">Мои расходы</string>
+    <string name="expenses_history">История расходов</string>
+    <string name="income_history">История доходов</string>
+    <string name="analytics">Анализ</string>
+
+
 </resources>

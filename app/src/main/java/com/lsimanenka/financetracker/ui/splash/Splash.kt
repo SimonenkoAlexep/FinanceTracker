@@ -15,7 +15,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lsimanenka.financetracker.R
-import com.lsimanenka.financetracker.ui.theme.LightColors
+import com.lsimanenka.financetracker.ui.theme.MyColors
 
 @Composable
 fun LottieSplashScreen(
@@ -40,7 +40,7 @@ fun LottieSplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LightColors.primary),
+            .background(MyColors.primary),
         contentAlignment = Alignment.Center
     ) {
         LottieAnimation(

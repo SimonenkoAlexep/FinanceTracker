@@ -18,6 +18,7 @@ import javax.inject.Singleton
         WorkerModule::class,
         DatabaseModule::class,
         LocalSourceModule::class,
+        SyncModule::class
     ]
 )
 interface AppComponent {

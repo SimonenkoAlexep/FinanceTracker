@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "transaction")
 data class TransactionDbEntity(
-    @PrimaryKey val id: Long,
+    @PrimaryKey var id: Long,
     @ColumnInfo(name = "account_id") val accountId: Long,
     @ColumnInfo(name = "category_id") val categoryId: Long,
     @ColumnInfo(name = "amount") val amount: String,

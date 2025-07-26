@@ -32,4 +32,5 @@ interface AccountRepository {
     ): AccountHistoryResponse
 
     suspend fun syncAccounts()
+
 }

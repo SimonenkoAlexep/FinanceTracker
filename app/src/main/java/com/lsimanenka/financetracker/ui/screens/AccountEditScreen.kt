@@ -8,11 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.domain.viewmodel.AccountEditViewModel
 import com.lsimanenka.financetracker.ui.utils.list_item.HeaderListItem
 import com.lsimanenka.financetracker.ui.utils.list_item.ListItem
@@ -24,7 +26,7 @@ import com.lsimanenka.financetracker.ui.navigation.Routes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountEditScreen(
-    registerSave: ( () -> Unit ) -> Unit,
+    registerSave: (() -> Unit) -> Unit,
     navController: NavHostController
 ) {
     //val navController = LocalNavController.current
@@ -32,7 +34,7 @@ fun AccountEditScreen(
     val factory = LocalAppComponent.current.viewModelFactory().get()
     val viewModel: AccountEditViewModel = viewModel(
         viewModelStoreOwner = entry,
-        factory             = factory
+        factory = factory
     )
 
     // Регистрируем функцию в родителе
@@ -51,7 +53,7 @@ fun AccountEditScreen(
                 onValueChange = viewModel::onNameChange,
                 modifier = Modifier
                     .fillMaxWidth(),
-                label = { Text("Имя счёта") },
+                label = { Text(stringResource(R.string.account_name_label)) },
                 singleLine = true,
             )
 
@@ -61,13 +63,12 @@ fun AccountEditScreen(
                 onValueChange = viewModel::onBalanceChange,
                 modifier = Modifier
                     .fillMaxWidth(),
-                label = { Text("Баланс") },
+                label = { Text(stringResource(R.string.account_balance_label)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Log.d("Edit State", "${editState.currency}")
-            HeaderListItem(
-                content = "Валюта",
+            HeaderListItem(content = stringResource(R.string.account_currency_label),
                 //money = "",
                 trailContent = editState.currency,
                 onClick = { showCurrencyDialog = true }
@@ -96,8 +97,7 @@ fun AccountEditScreen(
                         }
                         ListItem(
                             onClick = { showCurrencyDialog = false },
-                            content = "Отмена",
-
+                            content = stringResource(R.string.cancel)
                             )
                         Spacer(Modifier.height(16.dp))
                     }

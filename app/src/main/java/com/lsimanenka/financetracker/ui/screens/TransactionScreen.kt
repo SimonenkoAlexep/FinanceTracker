@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -27,15 +28,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.lsimanenka.financetracker.R
 import com.lsimanenka.financetracker.domain.viewmodel.TransactionViewModel
 import com.lsimanenka.financetracker.ui.utils.list_item.ListItem
 import com.lsimanenka.financetracker.ui.LocalAppComponent
 import com.lsimanenka.financetracker.ui.components.CategoryDropdown
-import com.lsimanenka.financetracker.ui.theme.LightColors
+import com.lsimanenka.financetracker.ui.theme.MyColors
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -66,40 +69,37 @@ fun TransactionScreen(
 
     Column(
         Modifier
-            .fillMaxWidth().background(color = Color.White)
+            .fillMaxWidth()
+            .background(color = MyColors.background)
     ) {
         ListItem(
-            content = "Счёт",
+            content = stringResource(R.string.account_label),
             trailContent = state.accountId.toString(),
-            )
+        )
         CategoryDropdown(
             selectedId = state.categoryId,
             onSelect = { viewModel.onCategoryIdChange(it) },
-            modifier = Modifier.fillMaxWidth().background(color = Color.White).padding(top = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MyColors.background)
+                .padding(top = 8.dp)
         )
         OutlinedTextField(
             value = state.amount,
             onValueChange = viewModel::onAmountChange,
-            label = { Text("Сумма") },
+            label = { Text(stringResource(R.string.amount_label)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
 
-        DatePickerField(
-            date = state.date,
-            onDateChange = viewModel::onDateChange
-        )
-
-        TimePickerField(
-            time = state.time,
-            onTimeChange = viewModel::onTimeChange
-        )
+        DatePickerField(date = state.date, onDateChange = viewModel::onDateChange)
+        TimePickerField(time = state.time, onTimeChange = viewModel::onTimeChange)
 
         OutlinedTextField(
             value = state.description.orEmpty(),
             onValueChange = viewModel::onDescriptionChange,
-            label = { Text("Комментарий") },
-            placeholder = { Text("Введите комментарий") },
+            label = { Text(stringResource(R.string.comment_label)) },
+            placeholder = { Text(stringResource(R.string.comment_placeholder)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 64.dp),
@@ -114,14 +114,14 @@ fun TransactionScreen(
                     navController.popBackStack()
                 }
             }) {
-                Text("Удалить")
+                Text(stringResource(R.string.delete))
             }
         }
     }
-
 }
 
 @SuppressLint("NewApi")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerField(
     date: LocalDate,
@@ -129,12 +129,10 @@ fun DatePickerField(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    // форматируем в dd.MM.yyyy
     val formatted = remember(date) {
         date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     }
 
-    // флаг для открытия DatePickerDialog
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
@@ -144,9 +142,7 @@ fun DatePickerField(
                 onDateChange(LocalDate.of(y, m + 1, d))
                 showDialog = false
             },
-            date.year,
-            date.monthValue - 1,
-            date.dayOfMonth
+            date.year, date.monthValue - 1, date.dayOfMonth
         ).show()
     }
 
@@ -154,11 +150,13 @@ fun DatePickerField(
         value = formatted,
         onValueChange = {},
         readOnly = true,
-        label = { Text("Дата") },
+        label = { Text(stringResource(R.string.date_label)) },
         trailingIcon = {
             Icon(
-                Icons.Default.DateRange, contentDescription = null,
-                Modifier.clickable { showDialog = true })
+                Icons.Default.DateRange,
+                contentDescription = null,
+                modifier = Modifier.clickable { showDialog = true }
+            )
         },
         modifier = modifier
             .fillMaxWidth()
@@ -167,7 +165,6 @@ fun DatePickerField(
 }
 
 
-// 2. TimePickerField.kt
 @SuppressLint("NewApi")
 @Composable
 fun TimePickerField(
@@ -176,12 +173,10 @@ fun TimePickerField(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    // форматируем в HH:mm
     val formatted = remember(time) {
         time.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 
-    // флаг для открытия TimePickerDialog
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
@@ -191,9 +186,7 @@ fun TimePickerField(
                 onTimeChange(LocalTime.of(h, min))
                 showDialog = false
             },
-            time.hour,
-            time.minute,
-            true
+            time.hour, time.minute, true
         ).show()
     }
 
@@ -201,14 +194,18 @@ fun TimePickerField(
         value = formatted,
         onValueChange = {},
         readOnly = true,
-        label = { Text("Время") },
+        label = { Text(stringResource(R.string.time_label)) },
         trailingIcon = {
-            Icon(Icons.Default.DateRange, contentDescription = null,
-                Modifier.clickable { showDialog = true })
+            Icon(
+                Icons.Default.DateRange,
+                contentDescription = null,
+                modifier = Modifier.clickable { showDialog = true }
+            )
         },
         modifier = modifier
             .fillMaxWidth()
             .clickable { showDialog = true }
     )
 }
+
 
