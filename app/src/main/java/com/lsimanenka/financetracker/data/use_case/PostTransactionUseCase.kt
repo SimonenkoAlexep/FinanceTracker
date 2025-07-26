@@ -2,6 +2,7 @@ package com.lsimanenka.financetracker.data.use_case
 
 import android.util.Log
 import com.lsimanenka.financetracker.common.Resource
+import com.lsimanenka.financetracker.data.model.Transaction
 import com.lsimanenka.financetracker.data.model.TransactionRequest
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 import com.lsimanenka.financetracker.data.repository.transaction.TransactionsRepository
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class PostTransactionUseCase @Inject constructor(
     private val repository: TransactionsRepository
 ) {
-    operator fun invoke(request: TransactionRequest) : Flow<Resource<TransactionResponse>> = flow {
+    operator fun invoke(request: TransactionRequest) : Flow<Resource<Transaction>> = flow {
         try {
             emit(Resource.Loading())
             val transaction = repository.createTransaction(request)

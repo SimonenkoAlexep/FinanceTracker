@@ -12,6 +12,7 @@ import com.lsimanenka.financetracker.data.model.AccountResponse
 import com.lsimanenka.financetracker.data.model.AccountUpdateRequest
 import com.lsimanenka.financetracker.data.model.Category
 import com.lsimanenka.financetracker.data.model.StatItem
+import com.lsimanenka.financetracker.data.model.Transaction
 import com.lsimanenka.financetracker.data.model.TransactionRequest
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 
@@ -153,6 +154,28 @@ fun TransactionResponse.toDbEntity(): TransactionDbEntity = TransactionDbEntity(
     comment = this.comment,
 )
 
+fun Transaction.toDbEntity(): TransactionDbEntity = TransactionDbEntity(
+    id = this.id.toLong(),
+    accountId = this.accountId.toLong(),
+    amount = this.amount,
+    createdAt = this.createdAt,
+    updatedAt = this.updatedAt,
+    categoryId = this.categoryId.toLong(),
+    transactionDate = this.transactionDate,
+    comment = this.comment,
+)
+
+fun TransactionWithDetails.toTransaction(): Transaction = Transaction(
+    id = this.transaction.id.toInt(),
+    accountId = this.account.id.toInt(),
+    amount = this.transaction.amount,
+    createdAt = this.transaction.createdAt,
+    updatedAt = this.transaction.updatedAt,
+    categoryId = this.category.id.toInt(),
+    transactionDate = this.transaction.transactionDate,
+    comment = this.transaction.comment,
+)
+
 /*fun TransactionRequest.toDbEntity(): TransactionDbEntity = TransactionDbEntity(
     id        = this.,
     accountId = this.accountId.toLong(),
@@ -161,7 +184,6 @@ fun TransactionResponse.toDbEntity(): TransactionDbEntity = TransactionDbEntity(
     updatedAt = this.updatedAt
 )*/
 
-// Room result → API model
 fun TransactionWithDetails.toResponse(): TransactionResponse = TransactionResponse(
     id = this.transaction.id.toInt(),
     account = AccountBrief(
@@ -179,6 +201,42 @@ fun TransactionWithDetails.toResponse(): TransactionResponse = TransactionRespon
     amount = this.transaction.amount,
     createdAt = this.transaction.createdAt,
     updatedAt = this.transaction.updatedAt,
+    transactionDate = this.transaction.transactionDate,
+    comment = this.transaction.comment
+)
+
+fun TransactionResponse.toTransactionWithDetails(): TransactionWithDetails = TransactionWithDetails(
+    transaction = TransactionDbEntity(
+        id = this.id.toLong(),
+        accountId = this.account.id.toLong(),
+        categoryId = this.category.id.toLong(),
+        amount = this.amount,
+        transactionDate = this.transactionDate,
+        comment = this.comment,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
+    ),
+    account = AccountDbEntity(
+        id = this.account.id.toLong(),
+        userId = this.account.id.toLong(),
+        name = this.account.name,
+        balance = this.account.balance,
+        currency = this.account.currency,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt
+    ),
+    category = CategoryDbEntity(
+        id = this.category.id.toLong(),
+        name = this.category.name,
+        emoji = this.category.emoji,
+        isIncome = this.category.isIncome
+    )
+)
+
+fun TransactionWithDetails.toRequest() : TransactionRequest = TransactionRequest(
+    accountId = this.account.id.toInt(),
+    categoryId = this.category.id.toInt(),
+    amount = this.transaction.amount,
     transactionDate = this.transaction.transactionDate,
     comment = this.transaction.comment
 )

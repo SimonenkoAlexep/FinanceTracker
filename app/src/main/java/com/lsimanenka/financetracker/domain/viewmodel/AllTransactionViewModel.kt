@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.lsimanenka.financetracker.common.Resource
 import com.lsimanenka.financetracker.data.AccountAssistant
 import com.lsimanenka.financetracker.data.model.TransactionResponse
+import com.lsimanenka.financetracker.data.use_case.GetAllTransactionUseCase
 import com.lsimanenka.financetracker.data.use_case.GetTransactionUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 //import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,18 +20,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-data class TransactionListState(
-    val isLoading: Boolean = false,
-    var transactions: List<TransactionResponse> = emptyList(),
-    val startDate: String? = null,
-    val endDate: String? = null,
-    val error: String = ""
-)
-
 //@HiltViewModel
 @RequiresApi(Build.VERSION_CODES.O)
-class HistoryViewModel @Inject constructor(
-    private val getTransactionUseCase: GetTransactionUseCase,
+class AllTransactionViewModel @Inject constructor(
+    private val getAllTransactionUseCase: GetAllTransactionUseCase,
     accountAssistant: AccountAssistant
 ) : ViewModel() {
 
@@ -40,11 +33,11 @@ class HistoryViewModel @Inject constructor(
     private val accountIdFlow: StateFlow<Int?> = accountAssistant.selectedAccountId
     private val isIncomeFlow = MutableStateFlow<Boolean?>(null)
 
-    private val _startDate = MutableStateFlow(LocalDate.now().withDayOfMonth(1))
-    private val _endDate   = MutableStateFlow(LocalDate.now())
+    private val _startDate = MutableStateFlow(LocalDate.now().minusDays(29))
+    private val _endDate = MutableStateFlow(LocalDate.now())
 
     val startDate: StateFlow<LocalDate> = _startDate
-    val endDate:   StateFlow<LocalDate> = _endDate
+    val endDate: StateFlow<LocalDate> = _endDate
 
     init {
         viewModelScope.launch {
@@ -52,7 +45,6 @@ class HistoryViewModel @Inject constructor(
                 .filterNotNull()
                 .flatMapLatest { accountId ->
                     isIncomeFlow
-                        .filterNotNull()
                         .flatMapLatest { isIncome ->
                             combine(_startDate, _endDate) { start, end ->
                                 Triple(accountId, start, end to isIncome)
@@ -61,17 +53,25 @@ class HistoryViewModel @Inject constructor(
                 }
                 .flatMapLatest { (accountId, start, endAndIncome) ->
                     val (end, isIncome) = endAndIncome
-                    loadTransactionsFlow(accountId, start, end, isIncome)
+                    loadTransactionsFlow(accountId, start, end)
                 }
                 .onEach { result ->
                     when (result) {
                         is Resource.Loading -> _state.value =
                             TransactionListState(isLoading = true)
-                        is Resource.Success -> _state.value =
-                            TransactionListState(
-                                isLoading = false,
-                                transactions = result.data.orEmpty()
+
+                        is Resource.Success -> {
+                            _state.value =
+                                TransactionListState(
+                                    isLoading = false,
+                                    transactions = result.data.orEmpty()
+                                )
+                            Log.d(
+                                "ChartDebugBEFORE",
+                                "Tx count: ${result.data.orEmpty()}, dates: ${startDate.value} - ${endDate.value}"
                             )
+                        }
+
                         is Resource.Error -> _state.value =
                             TransactionListState(
                                 isLoading = false,
@@ -80,6 +80,7 @@ class HistoryViewModel @Inject constructor(
                     }
                 }
                 .launchIn(this)
+
 
         }
     }
@@ -117,12 +118,11 @@ class HistoryViewModel @Inject constructor(
     private fun loadTransactionsFlow(
         accountId: Int,
         start: LocalDate,
-        end: LocalDate,
-        isIncome: Boolean
+        end: LocalDate
     ): Flow<Resource<List<TransactionResponse>>> {
         val fmt = DateTimeFormatter.ISO_LOCAL_DATE
         val startStr = start.format(fmt)
-        val endStr   = end.format(fmt)
-        return getTransactionUseCase(accountId, startStr, endStr, isIncome)
+        val endStr = end.format(fmt)
+        return getAllTransactionUseCase(accountId, startStr, endStr)
     }
 }

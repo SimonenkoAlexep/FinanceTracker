@@ -1,5 +1,6 @@
 package com.lsimanenka.financetracker.data.network
 
+import com.lsimanenka.financetracker.data.model.Transaction
 import com.lsimanenka.financetracker.data.model.TransactionRequest
 import com.lsimanenka.financetracker.data.model.TransactionResponse
 import okhttp3.Response
@@ -20,7 +21,7 @@ interface TransactionsApi {
     ): List<TransactionResponse>
 
     @POST("transactions")
-    suspend fun createTransaction(@Body request: TransactionRequest): TransactionResponse
+    suspend fun createTransaction(@Body request: TransactionRequest): Transaction
 
     @GET("transactions/{id}")
     suspend fun getTransactionById(@Path("id") accountId: Int): TransactionResponse

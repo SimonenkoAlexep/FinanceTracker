@@ -41,7 +41,7 @@ fun MyNavHost(
         }
         composable(Routes.INCOME) {
             ExpensesScreen(
-                isIncome           = true,
+                isIncome = true,
                 onTransactionClick = { txId ->
                     navController.navigate(Routes.navToEditTransaction(txId))
                 }
@@ -57,7 +57,14 @@ fun MyNavHost(
             ItemsScreen()
         }
         composable(Routes.SETTINGS) {
-            SettingsScreen()
+            SettingsScreen(onNavigateToColorPicker = {
+                navController.navigate("color_picker")
+            }, onNavigateToAppInfo = { navController.navigate("app_info") },
+                onNavigateToCreator = {navController.navigate("creator")},
+                onNavigateSyncSettings = {navController.navigate("sync_settings")},
+                onNavigateHapticsSettings = {navController.navigate("haptics_settings")},
+                onNavigateLanguageSettings = {navController.navigate("language_settings")}
+                )
         }
         composable(Routes.ACCOUNT_EDIT) {
             AccountEditScreen(registerSave, navController)
@@ -66,7 +73,7 @@ fun MyNavHost(
         composable(Routes.TRANSACTION_CREATE) {
             TransactionScreen(
                 transactionId = null,
-                registerSave  = registerSave,
+                registerSave = registerSave,
                 navController = navController
             )
         }
@@ -78,7 +85,7 @@ fun MyNavHost(
             val txId = backStackEntry.arguments!!.getInt("transactionId")
             TransactionScreen(
                 transactionId = txId,
-                registerSave  = registerSave,
+                registerSave = registerSave,
                 navController = navController
             )
         }
@@ -90,5 +97,34 @@ fun MyNavHost(
             StatisticsScreen(isIncome = true)
         }
 
+        composable(Routes.COLOR_PICKER) {
+            ColorPickerScreen(onColorSelected = {
+                navController.navigate("settings")
+            })
+        }
+
+        composable(Routes.APP_INFO) {
+            AboutAppScreen()
+        }
+
+        composable(Routes.CREATOR) {
+            CreatorScreen()
+        }
+
+        composable(Routes.SYNC_SETTINGS) {
+            SyncSettingsScreen()
+        }
+
+        composable(Routes.HAPTICS_SETTINGS) {
+            HapticsSettingsScreen()
+        }
+
+        composable(Routes.LANGUAGE_SETTINGS) {
+            LanguageSettingsScreen(onLanguageSelected = {
+                navController.navigate("settings")
+            })
+        }
+
     }
 }
+

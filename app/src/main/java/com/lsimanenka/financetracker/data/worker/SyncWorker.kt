@@ -4,16 +4,17 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.lsimanenka.financetracker.data.repository.account.AccountRepository
+import javax.inject.Inject
 
 class SyncWorker(
-    appContext: Context,
+    context: Context,
     params: WorkerParameters,
-    private val repository: AccountRepository
-) : CoroutineWorker(appContext, params) {
+    private val syncables: Set<Syncable>
+) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            repository.syncAccounts()
+            syncables.forEach { it.sync() }
             Result.success()
         } catch (e: Exception) {
             Result.retry()

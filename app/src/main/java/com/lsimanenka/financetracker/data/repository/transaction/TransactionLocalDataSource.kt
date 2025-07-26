@@ -1,4 +1,5 @@
 package com.lsimanenka.financetracker.data.repository.transaction
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.lsimanenka.financetracker.data.local.dao.TransactionDao
 import com.lsimanenka.financetracker.data.local.entity.TransactionDbEntity
@@ -22,6 +23,7 @@ class TransactionLocalDataSource @Inject constructor(
     suspend fun updateTransaction(entity: TransactionDbEntity): TransactionWithDetails {
         val updated = dao.updateTransaction(entity)
         if (updated == 0) {
+            Log.d("TRANSACTION SYNC UPDATING", "INSERTED")
             dao.insertTransaction(entity)
         }
         return dao.getTransactionById(entity.id.toInt())

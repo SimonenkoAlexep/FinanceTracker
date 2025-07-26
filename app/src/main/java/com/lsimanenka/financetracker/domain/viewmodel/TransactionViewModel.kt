@@ -87,7 +87,6 @@ class TransactionViewModel @Inject constructor(
                     }
                 }
             } else {
-                // режим CREATE
                 accountAssistant.selectedAccountId
                     .filterNotNull()
                     .firstOrNull()

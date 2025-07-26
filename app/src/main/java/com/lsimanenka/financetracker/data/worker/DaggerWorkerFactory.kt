@@ -20,7 +20,7 @@ class DaggerWorkerFactory @Inject constructor(
             SyncWorker::class.java.name ->
                 syncWorkerProvider.get().create(appContext, workerParameters)
             else ->
-                null  // остальным воркерам — дефолтная фабрика
+                null
         }
     }
 }

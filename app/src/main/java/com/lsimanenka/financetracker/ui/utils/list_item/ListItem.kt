@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 //import androidx.hilt.navigation.compose.hiltViewModel
-import com.lsimanenka.financetracker.ui.theme.LightColors
+import com.lsimanenka.financetracker.ui.theme.MyColors
 //import com.lsimanenka.financetracker.domain.viewmodel.AccountEditViewModel
 import com.lsimanenka.financetracker.domain.viewmodel.AccountViewModel
 import com.lsimanenka.financetracker.ui.LocalAppComponent
@@ -41,7 +41,7 @@ private fun GeneralListItem(
     comment: String? = null,
     money: String? = null,
     trail: @Composable (() -> Unit)? = null,
-    color: Color = Color.White,
+    color: Color = MyColors.background,
     trailContent: String? = null,
     onClick: (() -> Unit)? = null,
     //viewModel: AccountViewModel = hiltViewModel(),
@@ -70,7 +70,7 @@ private fun GeneralListItem(
                 modifier = Modifier
                     .size(24.dp)
                     .background(
-                        color = LightColors.secondary,
+                        color = MyColors.secondary,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -78,7 +78,7 @@ private fun GeneralListItem(
                 Text(
                     text = lead,
                     fontSize = 18.sp,
-                    color = Color.White,
+                    color = MyColors.secondary,
                     textAlign = TextAlign.Center
                 )
             }
@@ -86,10 +86,10 @@ private fun GeneralListItem(
         }
 
         if (comment == null) {
-            Text(content, fontSize = 16.sp)
+            Text(content, fontSize = 16.sp, color = MyColors.onSecondary)
         } else {
             Column {
-                Text(content, fontSize = 16.sp)
+                Text(content, fontSize = 16.sp, color = MyColors.onSecondary)
                 Text(comment, fontSize = 14.sp, color = Color(0xFF49454F))
             }
         }
@@ -142,7 +142,7 @@ fun HeaderListItem(
     money: String? = null,
     trailContent: String? = null,
     trail: @Composable (() -> Unit)? = null,
-    color: Color = LightColors.secondary,
+    color: Color = MyColors.secondary,
     onClick: (() -> Unit)? = null,
     modifier: Modifier? = null
 ) {
